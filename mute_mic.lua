@@ -22,6 +22,7 @@ end
 function toggle_mic_mute()
   if hs.audiodevice.defaultInputDevice():inputMuted() then
     hs.audiodevice.defaultInputDevice():setInputMuted(false)
+    hs.audiodevice.defaultInputDevice():setInputVolume(100)
     setIconState(false) -- not muted, show the mic icon
   else
     hs.audiodevice.defaultInputDevice():setInputMuted(true)

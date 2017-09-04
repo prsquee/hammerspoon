@@ -8,4 +8,3 @@ if (hostname == "Magic Sierra") then
 end
 
 require('windows')
-require('answer_phone')

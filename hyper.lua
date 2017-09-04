@@ -77,6 +77,18 @@ k:bind({}, 'c', function()
   k.triggered = true
 end)
 
+-- answer phone
+--
+k:bind({}, 'return', function()
+  telephoneApp = hs.application.find('Telephone')
+  telephoneApp:activate(allWindows)
+  hs.timer.usleep(1000)
+  if (telephoneApp:focusedWindow():title() ~= "Red Hat") then
+    telephoneApp:selectMenuItem({"Call", "Answer"})
+  end
+  k.triggered = true
+end)
+
 -- Enter Hyper Mode when F18 (Hyper/Capslock) is pressed
 pressedF18 = function()
   k.triggered = false
@@ -94,3 +106,5 @@ end
 
 -- Bind the Hyper key
 f18 = hs.hotkey.bind({}, 'F18', pressedF18, releasedF18)
+
+
