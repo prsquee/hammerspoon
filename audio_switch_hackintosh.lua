@@ -1,15 +1,8 @@
 -- hyper key mapping
 hyper = { "⌘", "⌥", "⌃", "⇧" }
 
--- start a logger
-log = hs.logger.new('global','debug')
-log.i('init')
---
 -- get the current output device and then my speakers and headphones
 -- I'm using the UID because finding by name didn't work
-
--- log.d(hs.audiodevice.defaultOutputDevice():uid())
--- log.d(hs.audiodevice.defaultInputDevice():uid())
 
 headphones  = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,2:0')
 speakers    = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1')    -- this is the FIRST line out device
@@ -43,13 +36,6 @@ function toggle_audio_output()
     -- hs.notify.new({title='🔊', informativeText='Now using Speakers'}):send()
   end
 end
--- bind the toggle to hyper+a
--- hs.hotkey.bind(hyper, 'a', toggle_audio_output)
-
--- bind the toggle function to my hyper+f key
-k:bind({}, 'a', function() toggle_audio_output()
-  k.triggered = true
-end)
 
 
 -- create the output icon in the menubar:
@@ -68,3 +54,4 @@ if audioOutputIcon then
   end
 end
 
+hs.hotkey.bind(hyper, 'a', nil, function() toggle_audio_output() end)

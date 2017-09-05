@@ -1,4 +1,5 @@
 -- a enubar icon to show the current mic state
+hyper = {"ctrl", "alt", "cmd", "shift"}
 muteMicIcon = hs.menubar.new()
 
 function setIconState(state)
@@ -22,16 +23,12 @@ end
 function toggle_mic_mute()
   if hs.audiodevice.defaultInputDevice():inputMuted() then
     hs.audiodevice.defaultInputDevice():setInputMuted(false)
-    hs.audiodevice.defaultInputDevice():setInputVolume(100)
+    hs.audiodevice.defaultInputDevice():setInputVolume(95)
     setIconState(false) -- not muted, show the mic icon
   else
     hs.audiodevice.defaultInputDevice():setInputMuted(true)
-    setIconState(true) -- muted, show the nope icon
+    setIconState(true) -- muted, show the muted icon
   end
 end
 
--- bind the toggle function to my hyper+f key
-k:bind({}, 'f', function() toggle_mic_mute()
-  k.triggered = true
-end)
-
+hs.hotkey.bind(hyper, 'f', nil, function() toggle_mic_mute() end)

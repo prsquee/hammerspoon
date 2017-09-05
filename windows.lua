@@ -15,6 +15,7 @@
 -- OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 -- DEALINGS IN THE SOFTWARE.
 
+hyper = {'cmd','alt','ctrl','shift'}
 hs.window.animationDuration = 0
 
 local sizes = {2, 3, 3/2}
@@ -100,7 +101,7 @@ function fullDimension(dim)
 
     if (dim == 'x') then
       cell = '0,0 ' .. GRID.w .. 'x' .. GRID.h
-    else  
+    else
       cell[dim] = GRID[dim]
       cell[dim == 'w' and 'x' or 'y'] = 0
     end
@@ -109,9 +110,8 @@ function fullDimension(dim)
   end
 end
 
-k:bind({}, "p", function ()
+hs.hotkey.bind(hyper, "p", function ()
   pressed.down = true
-  k.triggered = true
   if pressed.up then
     fullDimension('h')
   else
@@ -124,9 +124,8 @@ end, function ()
   pressed.down = false
 end)
 
-k:bind({}, "]", function ()
+hs.hotkey.bind(hyper, "]", function ()
   pressed.right = true
-  k.triggered = true
   if pressed.left then
     fullDimension('w')
   else
@@ -139,10 +138,9 @@ end, function ()
   pressed.right = false
 end)
 
-k:bind({}, "o", function ()
+hs.hotkey.bind(hyper, "o", function ()
   pressed.left = true
-  k.triggered = true
-  if pressed.right then 
+  if pressed.right then
     fullDimension('w')
   else
     nextStep('w', false, function (cell, nextSize)
@@ -154,9 +152,8 @@ end, function ()
   pressed.left = false
 end)
 
-k:bind({}, "[", function ()
+hs.hotkey.bind(hyper, "[", function ()
   pressed.up = true
-  k.triggered = true
   if pressed.down then
       fullDimension('h')
   else
@@ -169,14 +166,13 @@ end, function ()
   pressed.up = false
 end)
 
-k:bind({}, "space", function ()
+hs.hotkey.bind(hyper, "space", function ()
   nextFullScreenStep()
-  k.triggered = true
 end)
 
--- TOO maximize vertically:
+-- maximize vertically:
 --
-k:bind({}, '\\', function ()
+hs.hotkey.bind(hyper, '\\', function ()
   local screen = hs.window.frontmostWindow():screen()
   local f = hs.window.frontmostWindow():frame()
   local max = screen:frame()
