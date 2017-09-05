@@ -1,4 +1,4 @@
--- a enubar icon to show the current mic state
+-- a menubar icon to show the current mic state
 hyper = {"ctrl", "alt", "cmd", "shift"}
 muteMicIcon = hs.menubar.new()
 
