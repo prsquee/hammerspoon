@@ -16,7 +16,8 @@ end
 
 if muteMicIcon then
   muteMicIcon:setClickCallback(muteMicClicked)                    -- callback when clicked
-  setIconState(hs.audiodevice.defaultInputDevice():inputMuted())  -- startup icon status
+  hs.audiodevice.defaultInputDevice():setInputMuted(true)         -- force mute on HS start
+  setIconState(hs.audiodevice.defaultInputDevice():inputMuted())  -- set startup icon status
 end
 
 -- toggle mute state. Also update the menubar icon
