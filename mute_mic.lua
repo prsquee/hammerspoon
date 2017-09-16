@@ -1,4 +1,4 @@
--- a menubar icon to show the current mic state
+-- DEPRECATED. THIS IS NOW A SPOON
 hyper = {"ctrl", "alt", "cmd", "shift"}
 muteMicIcon = hs.menubar.new()
 
@@ -10,12 +10,8 @@ function setIconState(state)
   end
 end
 
-function muteMicClicked()
-  toggle_mic_mute()     -- when clicked
-end
-
 if muteMicIcon then
-  muteMicIcon:setClickCallback(muteMicClicked)                    -- callback when clicked
+  muteMicIcon:setClickCallback(toggle_mic_mute)                   -- callback when clicked
   hs.audiodevice.defaultInputDevice():setInputMuted(true)         -- force mute on HS start
   setIconState(hs.audiodevice.defaultInputDevice():inputMuted())  -- set startup icon status
 end

@@ -66,5 +66,10 @@ hs.hotkey.bind(hyper, 'return', function()
   hs.timer.usleep(1000)
   if (telephoneApp:focusedWindow():title() ~= "Red Hat") then
     telephoneApp:selectMenuItem({"Call", "Answer"})
+    -- workaround until audioswitch is a spoon:
+    if headphonesMic:inputMuted() then
+      headphonesMic:setInputMuted(false)
+    end
+    headphonesMic:setInputVolume(100)
   end
 end)

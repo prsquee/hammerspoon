@@ -23,7 +23,8 @@ function toggle_audio_output()
     headphonesMic:setDefaultInputDevice()
     -- change the icons in the menubar
     audioOutputIcon:setTitle('🎧')
-    setIconState(headphonesMic:inputMuted()) -- change mic icon status
+    spoon.MuteMic:setIconState(headphonesMic:inputMuted())
+    -- hs.alert.show("headphones")
 
     -- hs.notify.new({title='🎧', informativeText='Now using Headphones'}):send()
   else
@@ -31,7 +32,8 @@ function toggle_audio_output()
     webcamMic:setDefaultInputDevice()
 
     audioOutputIcon:setTitle('🔊')
-    setIconState(webcamMic:inputMuted()) -- change mic icon status
+    spoon.MuteMic:setIconState(webcamMic:inputMuted())
+    -- hs.alert.show("speakers")
 
     -- hs.notify.new({title='🔊', informativeText='Now using Speakers'}):send()
   end
