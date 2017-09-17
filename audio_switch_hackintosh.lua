@@ -1,6 +1,3 @@
--- hyper key mapping
-hyper = { "⌘", "⌥", "⌃", "⇧" }
-
 -- get the current output device and then my speakers and headphones
 -- I'm using the UID because finding by name didn't work
 

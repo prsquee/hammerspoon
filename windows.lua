@@ -15,7 +15,6 @@
 -- OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 -- DEALINGS IN THE SOFTWARE.
 
-hyper = {'cmd','alt','ctrl','shift'}
 hs.window.animationDuration = 0
 
 local sizes = {2, 3, 3/2}

@@ -1,5 +1,3 @@
-hyper = {"ctrl", "alt", "cmd", "shift"}
-
 hs.hotkey.bind(hyper, 'b', function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
 -- arrows = { h = 'left', j = 'down', k = 'up', l = 'right'}

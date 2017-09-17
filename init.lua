@@ -1,4 +1,4 @@
-hyper = {"ctrl", "alt", "cmd", "shift"}
+hyper = {"ctrl", "alt", "shift"}
 require('auto_reloader')
 require('hyper')
 
