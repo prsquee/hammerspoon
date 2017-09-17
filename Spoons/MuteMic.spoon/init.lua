@@ -32,7 +32,7 @@ function obj:setIconState(state)
   if state then
     obj.menuBarItem:setTitle('🙊')
   else
-    obj.menuBarItem:setTitle('🗣')
+    obj.menuBarItem:setTitle('🎙')
   end
 end
 
