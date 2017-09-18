@@ -1,30 +1,5 @@
 hs.hotkey.bind(hyper, 'b', function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
--- arrows = { h = 'left', j = 'down', k = 'up', l = 'right'}
--- 
--- local function pressedArrow(arrow, mod)
---   mod = mod or {}
---   return function()
---     hs.eventtap.event.newKeyEvent(mod, arrow, true):post()
---     hs.eventtap.event.newKeyEvent(mod, arrow, false):post()
---     k.triggered = true
---   end
--- end
--- 
--- local function repeatArrow(arrow, mod)
---   mod = mod or {}
---   return function()
---     hs.eventtap.event.newKeyEvent(mod, arrow, true):setProperty(hs.eventtap.event.properties.keyboardEventAutorepeat, 1):post()
---   end
--- end
--- 
--- for key,arrow in pairs(arrows) do
---   k:bind({}, key, pressedArrow(arrow), nil, repeatArrow(arrow))
---   k:bind({'shift'}, key, pressedArrow(arrow, {'shift'}), nil, repeatArrow(arrow, {'shift'}))
--- end
--- 
--- hyper + s to activate screensaver
-
 hs.hotkey.bind(hyper, 's', function()
   ActivateScreenSaverScript = [[
     tell application "System Events"
@@ -64,10 +39,23 @@ hs.hotkey.bind(hyper, 'return', function()
   hs.timer.usleep(1000)
   if (telephoneApp:focusedWindow():title() ~= "Red Hat") then
     telephoneApp:selectMenuItem({"Call", "Answer"})
-    -- workaround until audioswitch is a spoon:
-    if headphonesMic:inputMuted() then
-      headphonesMic:setInputMuted(false)
+
+    -- really nasty workaround until audioswitch is a single spoon:
+    if hostname == "Magic Sierra" then
+      if headphonesMic:inputMuted() then
+        headphonesMic:setInputMuted(false)
+        headphonesMic:setInputVolume(100)
+        --- hs.spoon.MuteMic:setIconState(false)
+      end
+    else
+      -- check if MBP's mic is muted
+      if hs.audiodevice.defaultInputDEvice():inputMuted() then
+        hs.audiodevice.defaultInputDevice():setInputMuted(false)
+        hs.audiodevice.defaultInputDevice():setInputVolume(100)
+        -- hs.spoon.MuteMic:setIconState(true)
+      end
     end
-    headphonesMic:setInputVolume(100)
+  else
+    print("not a phone call window.")
   end
 end)
