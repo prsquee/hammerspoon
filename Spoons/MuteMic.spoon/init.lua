@@ -1,6 +1,6 @@
 -- Mute Current Audio Input
 
--- Download: 
+-- Download:
 
 local obj = {}
 obj.__index = obj
@@ -23,16 +23,15 @@ end
 obj.spoonPath = script_path()
 
 function obj:init()
-  self.menuBarItem = hs.menubar.new(false)
-  self.menuBarItem:setClickCallback(self.clicked)
-  self.setIconState(hs.audiodevice.defaultInputDevice():inputMuted())
 end
 
 function obj:setIconState(state)
   if state then
     obj.menuBarItem:setTitle('🙊')
+    return 'monkey'
   else
     obj.menuBarItem:setTitle('🎙')
+    return 'mic'
   end
 end
 
@@ -41,14 +40,19 @@ function obj:bindHotkeys(mapping)
     self.hotkeyToggle:delete()
   end
   local toggleMods = mapping["toggle"][1]
-  local toggleKey = mapping["toggle"][2]
+  local toggleKey  = mapping["toggle"][2]
   self.hotkeyToggle = hs.hotkey.new(toggleMods, toggleKey, function() self.clicked() end)
 
   return self
 end
 
 function obj:start()
-  self.menuBarItem:returnToMenuBar()
+  print('this is start')
+  hs.audiodevice.defaultInputDevice():setInputMuted(true)
+  self.menuBarItem = hs.menubar.new()
+  self.menuBarItem:setTitle('🙊')
+  -- print('mic status: ', hs.audiodevice.defaultInputDevice():inputMuted())
+  self.menuBarItem:setClickCallback(self.clicked)
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
   end
