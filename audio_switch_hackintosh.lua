@@ -6,6 +6,7 @@ speakers    = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1'
 -- whatever = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,4:2')   -- this is the SECOND line out device
 webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
 headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
+currentDevice = nil
 
 function toggle_audio_output()
   local currentOutput = hs.audiodevice.defaultOutputDevice()
@@ -24,6 +25,7 @@ function toggle_audio_output()
     -- hs.alert.show("headphones")
 
     -- hs.notify.new({title='🎧', informativeText='Now using Headphones'}):send()
+    currentDevice = 'headphones'
   else
     speakers:setDefaultOutputDevice()
     webcamMic:setDefaultInputDevice()
@@ -33,6 +35,7 @@ function toggle_audio_output()
     -- hs.alert.show("speakers")
 
     -- hs.notify.new({title='🔊', informativeText='Now using Speakers'}):send()
+    currentDevice = 'speakers'
   end
 end
 
@@ -48,9 +51,12 @@ if audioOutputIcon then
   audioOutputIcon:setClickCallback(audioIconClicked) -- callback when clicked
   if hs.audiodevice.defaultOutputDevice():name() == speakers:name() then
     audioOutputIcon:setTitle('🔊')
+    currentDevice = 'speakers'
   else
     audioOutputIcon:setTitle('🎧')
+    currentDevice = 'headphones'
   end
 end
 
 hs.hotkey.bind(hyper, 'a', nil, function() toggle_audio_output() end)
+print(currentDevice)
