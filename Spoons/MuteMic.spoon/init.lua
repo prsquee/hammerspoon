@@ -39,7 +39,7 @@ end
 function audiodevwatch(dev_uid, event_name, event_scope, event_element)
   -- print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
   inputDev = hs.audiodevice.findDeviceByUID(dev_uid)
-  if event_name == 'mute' and inputDev:inputMuted() then
+  if inputDev:inputMuted() then
     obj.menuBarItem:setTitle('🙊')
   else
     obj.menuBarItem:setTitle('🎙')
@@ -54,8 +54,8 @@ function obj:start()
   self.menuBarItem:setClickCallback(self.clicked)
 
   for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
-    dev:watcherCallback(audiodevwatch):watcherStart()
     print("Setting up watcher for audio device: ", dev:name())
+    dev:watcherCallback(audiodevwatch):watcherStart()
   end
 
   if self.hotkeyToggle then
