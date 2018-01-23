@@ -25,16 +25,6 @@ obj.spoonPath = script_path()
 function obj:init()
 end
 
-function obj:setIconState(state)
-  if state then
-    obj.menuBarItem:setTitle('🙊')
-    return 'monkey'
-  else
-    obj.menuBarItem:setTitle('🎙')
-    return 'mic'
-  end
-end
-
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
     self.hotkeyToggle:delete()
@@ -46,13 +36,28 @@ function obj:bindHotkeys(mapping)
   return self
 end
 
+function audiodevwatch(dev_uid, event_name, event_scope, event_element)
+  -- print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
+  inputDev = hs.audiodevice.findDeviceByUID(dev_uid)
+  if event_name == 'mute' and inputDev:inputMuted() then
+    obj.menuBarItem:setTitle('🙊')
+  else
+    obj.menuBarItem:setTitle('🎙')
+  end
+end
+
 function obj:start()
-  print('this is start')
+  -- print('this is start')
   hs.audiodevice.defaultInputDevice():setInputMuted(true)
   self.menuBarItem = hs.menubar.new()
   self.menuBarItem:setTitle('🙊')
-  -- print('mic status: ', hs.audiodevice.defaultInputDevice():inputMuted())
   self.menuBarItem:setClickCallback(self.clicked)
+
+  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
+    dev:watcherCallback(audiodevwatch):watcherStart()
+    print("Setting up watcher for audio device: ", dev:name())
+  end
+
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
   end
@@ -66,26 +71,21 @@ function obj:stop()
     self.hotkeyToggle:disable()
   end
 
+  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
+    dev:watcherStop()
+    print("stopping watcher for audio device: ", dev:name())
+  end
+
   return self
 end
 
 function obj.clicked()
   if hs.audiodevice.defaultInputDevice():inputMuted() then
-    obj.unmute()
+    hs.audiodevice.defaultInputDevice():setInputMuted(false)
+    hs.audiodevice.defaultInputDevice():setInputVolume(100)
   else
-    obj.mute()
+    hs.audiodevice.defaultInputDevice():setInputMuted(true)
   end
-end
-
-function obj:unmute()
-  hs.audiodevice.defaultInputDevice():setInputMuted(false)
-  hs.audiodevice.defaultInputDevice():setInputVolume(100)
-  obj:setIconState(false)
-end
-
-function obj:mute()
-  hs.audiodevice.defaultInputDevice():setInputMuted(true)
-  obj:setIconState(true) -- muted, show the muted icon
 end
 
 return obj
