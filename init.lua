@@ -12,9 +12,18 @@ if (hostname == "Magic Hi Sierra") then
 end
 require('windows')
 
--- function audiowatch(arg)
---   print("Audiowatch arg: ", arg)
--- end
+-- not sure if this is a good place to put this
+function audiowatch(arg)
+  -- print("Audiowatch arg: ", arg)
+  if arg == "dIn " then
+    if hs.audiodevice.defaultInputDevice():inputMuted() then
+      spoon.MuteMic:setMenuBarIcon('🙊')
+    else
+      spoon.MuteMic:setMenuBarIcon('🎙')
+    end
+  end
+end
 
--- hs.audiodevice.watcher.setCallback(audiowatch)
--- hs.audiodevice.watcher.start()
+hs.audiodevice.watcher.setCallback(audiowatch)
+hs.audiodevice.watcher.start()
+

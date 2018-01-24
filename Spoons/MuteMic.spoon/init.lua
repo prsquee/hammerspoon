@@ -58,21 +58,6 @@ function obj:start()
     dev:watcherCallback(audiodevwatch):watcherStart()
   end
 
-  -- FIXME
-  function audiowatch(arg)
-    print("Audiowatch arg: ", arg)
-    if arg == "dIn " then
-      if hs.audiodevice.defaultInputDevice():inputMuted() then
-        obj.menuBarItem:setTitle('🙊')
-      else
-        obj.menuBarItem:setTitle('🎙')
-      end
-    end
-  end
-
-  hs.audiodevice.watcher.setCallback(audiowatch)
-  hs.audiodevice.watcher.start()
-
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
   end
@@ -101,6 +86,10 @@ function obj.clicked()
   else
     hs.audiodevice.defaultInputDevice():setInputMuted(true)
   end
+end
+
+function obj:setMenuBarIcon(arg)
+  obj.menuBarItem:setTitle(arg)
 end
 
 return obj
