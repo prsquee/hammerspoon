@@ -40,20 +40,16 @@ hs.hotkey.bind(hyper, 'return', function()
   if (telephoneApp:focusedWindow():title() ~= "Red Hat") then
     telephoneApp:selectMenuItem({"Call", "Answer"})
 
-    -- really nasty workaround until audioswitch is a single spoon:
-    if hostname == "Magic Sierra" then
-      if headphonesMic:inputMuted() then
-        headphonesMic:setInputMuted(false)
-        headphonesMic:setInputVolume(100)
-        --- hs.spoon.MuteMic:setIconState(false)
+    if hostname == "Magic Hi Sierra" then
+      spoon.AudioSwitch.headphonesMic:setDefaultInputDevice()
+      if spoon.AudioSwitch.headphonesMic:inputMuted() then
+        spoon.AudioSwitch.headphonesMic:setInputMuted(false)
+        spoon.AudioSwitch.headphonesMic:setInputVolume(100)
       end
-    else
-      -- check if MBP's mic is muted
-      if hs.audiodevice.defaultInputDEvice():inputMuted() then
-        hs.audiodevice.defaultInputDevice():setInputMuted(false)
-        hs.audiodevice.defaultInputDevice():setInputVolume(100)
-        -- hs.spoon.MuteMic:setIconState(true)
-      end
+    -- check if MBP's mic is muted
+    elseif hs.audiodevice.defaultInputDEvice():inputMuted() then
+      hs.audiodevice.defaultInputDevice():setInputMuted(false)
+      hs.audiodevice.defaultInputDevice():setInputVolume(100)
     end
   else
     print("not a phone call window.")

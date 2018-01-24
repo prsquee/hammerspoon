@@ -7,8 +7,12 @@ spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 spoon.MuteMic:start()
 
 hostname = hs.host.localizedName()
-if (hostname == "Magic Hi Sierra") then
-  require('audio_switch_hackintosh')
+if hostname == "Magic Hi Sierra" then
+  -- require('audio_switch_hackintosh')
+  print('hackintosh')
+  hs.loadSpoon("AudioSwitch")
+  spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
+  spoon.AudioSwitch:start()
 end
 require('windows')
 
@@ -20,6 +24,13 @@ function audiowatch(arg)
       spoon.MuteMic:setMenuBarIcon('🙊')
     else
       spoon.MuteMic:setMenuBarIcon('🎙')
+    end
+  end
+  if (arg == "dOut" and hostname == "Magic Hi Sierra") then
+    if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
+      spoon.AudioSwitch:setMenuBarIcon('🔊')
+    else
+      spoon.AudioSwitch:setMenuBarIcon('🎧')
     end
   end
 end
