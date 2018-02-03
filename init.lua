@@ -14,27 +14,31 @@ if hostname == "Magic Hi Sierra" then
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
 end
-require('windows')
-
--- not sure if this is a good place to put this
-function audiowatch(arg)
-  -- print("Audiowatch arg: ", arg)
-  if arg == "dIn " then
-    if hs.audiodevice.defaultInputDevice():inputMuted() then
-      spoon.MuteMic:setMenuBarIcon('🙊')
-    else
-      spoon.MuteMic:setMenuBarIcon('🎙')
-    end
-  end
-  if (arg == "dOut" and hostname == "Magic Hi Sierra") then
-    if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
-      spoon.AudioSwitch:setMenuBarIcon('🔊')
-    else
-      spoon.AudioSwitch:setMenuBarIcon('🎧')
-    end
-  end
+if hostname == "multivac" then
+  spoon.MuteMic:mbpHeadphonesWatcher()
+  require('audiowatcher')
 end
 
-hs.audiodevice.watcher.setCallback(audiowatch)
-hs.audiodevice.watcher.start()
+require('windows')
 
+-- moving this to a hostname based watcher
+-- function audiowatch(arg)
+--   -- print("Audiowatch arg: ", arg)
+--   if arg == "dIn " then
+--     if hs.audiodevice.defaultInputDevice():inputMuted() then
+--       spoon.MuteMic:setMenuBarIcon('🙊')
+--     else
+--       spoon.MuteMic:setMenuBarIcon('🎙')
+--     end
+--   end
+--   if (arg == "dOut" and hostname == "Magic Hi Sierra") then
+--     if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
+--       spoon.AudioSwitch:setMenuBarIcon('🔊')
+--     else
+--       spoon.AudioSwitch:setMenuBarIcon('🎧')
+--     end
+--   end
+-- end
+-- 
+-- hs.audiodevice.watcher.setCallback(audiowatch)
+-- hs.audiodevice.watcher.start()

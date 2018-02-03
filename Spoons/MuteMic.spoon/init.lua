@@ -5,16 +5,18 @@
 local obj = {}
 obj.__index = obj
 
--- metadata
-
+-- {{{ metadata
 obj.name = "MuteMic"
 obj.version = "0.1"
 obj.author = "sQuEE"
 obj.homepage = "https://github.com/prsquee"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
+-- }}}
 
 obj.menuBarItem  = nil
 obj.hotkeyToggle = nil
+obj.headphones_icon = hs.menubar.new()
+
 
 local function script_path()
     local str = debug.getinfo(2, "S").source:sub(2)
@@ -37,12 +39,33 @@ function obj:bindHotkeys(mapping)
 end
 
 function audiodevwatch(dev_uid, event_name, event_scope, event_element)
-  -- print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
+  print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
   inputDev = hs.audiodevice.findDeviceByUID(dev_uid)
   if inputDev:inputMuted() then
     obj.menuBarItem:setTitle('🙊')
   else
     obj.menuBarItem:setTitle('🎙')
+  end
+
+-- FIXME: this works, but it's a horrible place to put this.
+  if (hostname == 'multivac' and event_name == 'diff') then
+    if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
+      obj.headphones_icon:setTitle('🎧')
+      obj.headphones_icon:returnToMenuBar()
+    else
+      obj.headphones_icon:removeFromMenuBar()
+    end
+  end
+end
+
+function obj:mbpHeadphonesWatcher()
+  if pcall("hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name") then
+    if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
+      obj.headphones_icon:setTitle('🎧')
+      obj.headphones_icon:returnToMenuBar()
+    end
+  else
+    print('current output device does not have multiple datasource. Prolly Airpods or Digital')
   end
 end
 
@@ -93,3 +116,4 @@ function obj:setMenuBarIcon(arg)
 end
 
 return obj
+
