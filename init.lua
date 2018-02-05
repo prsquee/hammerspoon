@@ -9,14 +9,14 @@ spoon.MuteMic:start()
 hostname = hs.host.localizedName()
 if hostname == "Magic Hi Sierra" then
   -- require('audio_switch_hackintosh')
-  print('hackintosh')
+  -- print('hackintosh')
   hs.loadSpoon("AudioSwitch")
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
 end
 if hostname == "multivac" then
-  spoon.MuteMic:mbpHeadphonesWatcher()
-  require('audiowatcher')
+  -- spoon.MuteMic:mbpHeadphonesWatcher()
+  require("mbpAudioSwitch")
 end
 
 require('windows')

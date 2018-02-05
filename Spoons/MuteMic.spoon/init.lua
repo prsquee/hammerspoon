@@ -48,26 +48,26 @@ function audiodevwatch(dev_uid, event_name, event_scope, event_element)
   end
 
 -- FIXME: this works, but it's a horrible place to put this.
-  if (hostname == 'multivac' and event_name == 'diff') then
-    if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
-      obj.headphones_icon:setTitle('🎧')
-      obj.headphones_icon:returnToMenuBar()
-    else
-      obj.headphones_icon:removeFromMenuBar()
-    end
-  end
+--   if (hostname == 'multivac' and event_name == 'diff') then
+--     if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
+--       obj.headphones_icon:setTitle('🎧')
+--       obj.headphones_icon:returnToMenuBar()
+--     else
+--       obj.headphones_icon:removeFromMenuBar()
+--     end
+--   end
 end
 
-function obj:mbpHeadphonesWatcher()
-  if pcall("hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name") then
-    if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
-      obj.headphones_icon:setTitle('🎧')
-      obj.headphones_icon:returnToMenuBar()
-    end
-  else
-    print('current output device does not have multiple datasource. Prolly Airpods or Digital')
-  end
-end
+-- function obj:mbpHeadphonesWatcher()
+--   if pcall("hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name") then
+--     if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
+--       obj.headphones_icon:setTitle('🎧')
+--       obj.headphones_icon:returnToMenuBar()
+--     end
+--   else
+--     print('current output device does not have multiple datasource. Prolly Airpods or Digital')
+--   end
+-- end
 
 function obj:start()
   -- print('this is start')
