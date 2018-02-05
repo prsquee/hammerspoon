@@ -1,6 +1,5 @@
 -- toggle between speakers and headpphones
 
-
 local obj = {}
 obj.__index = obj
 
@@ -22,6 +21,14 @@ obj.speakers   = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3
 obj.webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
 obj.headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
 
+local function script_path()
+    local str = debug.getinfo(2, "S").source:sub(2)
+    return str:match("(.*/)")
+end
+obj.spoonPath = script_path()
+
+obj.airpodsIcon = hs.image.imageFromPath(script_path() .. "airpods.png")
+-- hs.menubar.new():setIcon(hs.image.imageFromPath("airpods-black.png"):setSize({w=16,h=16}))
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -45,6 +52,9 @@ function obj:start()
 
   if hs.audiodevice.defaultOutputDevice():name() == self.speakers:name() then
     self.outputIcon:setTitle('🔊')
+  elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
+    obj.outputIcon:setTitle(nil)
+    obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
   else
     self.outputIcon:setTitle('🎧')
   end
@@ -92,9 +102,12 @@ function audiowatch(arg)
   end
   if (arg == "dOut") then
     if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
-      spoon.AudioSwitch:setMenuBarIcon('🔊')
+      obj.outputIcon:setTitle('🔊')
+    elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
+      obj.outputIcon:setTitle(nil)
+      obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
     else
-      spoon.AudioSwitch:setMenuBarIcon('🎧')
+      obj.outputIcon:setTitle('🎧')
     end
   end
 end
