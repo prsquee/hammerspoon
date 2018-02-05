@@ -28,7 +28,6 @@ end
 obj.spoonPath = script_path()
 
 obj.airpodsIcon = hs.image.imageFromPath(script_path() .. "airpods.png")
--- hs.menubar.new():setIcon(hs.image.imageFromPath("airpods-black.png"):setSize({w=16,h=16}))
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -50,14 +49,7 @@ function obj:start()
   self.outputIcon = hs.menubar.new()
   self.outputIcon:setClickCallback(self.clicked)
 
-  if hs.audiodevice.defaultOutputDevice():name() == self.speakers:name() then
-    self.outputIcon:setTitle('🔊')
-  elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
-    obj.outputIcon:setTitle(nil)
-    obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
-  else
-    self.outputIcon:setTitle('🎧')
-  end
+  setOutputIcon()
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -87,12 +79,9 @@ function obj.clicked()
   end
 end
 
-function obj:setMenuBarIcon(arg)
-  obj.outputIcon:setTitle(arg)
-end
 
 function audiowatch(arg)
-  -- print("Audiowatch arg: ", arg)
+  print("Audiowatch arg: ", arg)
   if arg == "dIn " then
     if hs.audiodevice.defaultInputDevice():inputMuted() then
       spoon.MuteMic:setMenuBarIcon('🙊')
@@ -101,14 +90,24 @@ function audiowatch(arg)
     end
   end
   if (arg == "dOut") then
-    if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
-      obj.outputIcon:setTitle('🔊')
-    elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
-      obj.outputIcon:setTitle(nil)
-      obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
-    else
-      obj.outputIcon:setTitle('🎧')
-    end
+    setOutputIcon()
+  end
+end
+
+function obj:setMenuBarIcon(arg)
+  obj.outputIcon:setTitle(arg)
+end
+
+function setOutputIcon()
+  if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
+    obj.outputIcon:setIcon(nil)
+    obj.outputIcon:setTitle('🔊')
+  elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
+    obj.outputIcon:setTitle(nil)
+    obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
+  else
+    obj.outputIcon:setIcon(nil)
+    obj.outputIcon:setTitle('🎧')
   end
 end
 
