@@ -1,5 +1,6 @@
 -- toggle between speakers and headpphones
 
+
 local obj = {}
 obj.__index = obj
 
@@ -11,7 +12,7 @@ obj.author = "sQuEE"
 obj.homepage = "https://github.com/prsquee/hammerspoon"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 
-obj.menuBarItem  = nil
+obj.outputIcon  = nil
 obj.hotkeyToggle = nil
 
 -- all my devices
@@ -21,11 +22,6 @@ obj.speakers   = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3
 obj.webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
 obj.headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
 
-local function script_path()
-    local str = debug.getinfo(2, "S").source:sub(2)
-    return str:match("(.*/)")
-end
-obj.spoonPath = script_path()
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -44,13 +40,13 @@ function obj:start()
     return
   end
 
-  self.menuBarItem = hs.menubar.new()
-  self.menuBarItem:setClickCallback(self.clicked)
+  self.outputIcon = hs.menubar.new()
+  self.outputIcon:setClickCallback(self.clicked)
 
   if hs.audiodevice.defaultOutputDevice():name() == self.speakers:name() then
-    self.menuBarItem:setTitle('🔊')
+    self.outputIcon:setTitle('🔊')
   else
-    self.menuBarItem:setTitle('🎧')
+    self.outputIcon:setTitle('🎧')
   end
 
   if self.hotkeyToggle then
@@ -61,7 +57,7 @@ function obj:start()
 end
 
 function obj:stop()
-  self.menuBarItem:removeFromMenuBar()
+  self.outputIcon:removeFromMenuBar()
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
@@ -82,7 +78,28 @@ function obj.clicked()
 end
 
 function obj:setMenuBarIcon(arg)
-  obj.menuBarItem:setTitle(arg)
+  obj.outputIcon:setTitle(arg)
 end
+
+function audiowatch(arg)
+  -- print("Audiowatch arg: ", arg)
+  if arg == "dIn " then
+    if hs.audiodevice.defaultInputDevice():inputMuted() then
+      spoon.MuteMic:setMenuBarIcon('🙊')
+    else
+      spoon.MuteMic:setMenuBarIcon('🎙')
+    end
+  end
+  if (arg == "dOut") then
+    if hs.audiodevice.defaultOutputDevice():name() == spoon.AudioSwitch.speakers:name() then
+      spoon.AudioSwitch:setMenuBarIcon('🔊')
+    else
+      spoon.AudioSwitch:setMenuBarIcon('🎧')
+    end
+  end
+end
+
+hs.audiodevice.watcher.setCallback(audiowatch)
+hs.audiodevice.watcher.start()
 
 return obj
