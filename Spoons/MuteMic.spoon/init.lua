@@ -52,7 +52,7 @@ function obj:start()
   self.menuBarItem = hs.menubar.new()
   self.menuBarItem:setIcon(self.inactiveMiteIcon:setSize({w=16,h=16}))
   self.menuBarItem:setClickCallback(self.clicked)
-
+  self.startInputWatchers()
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -67,15 +67,13 @@ function obj:stop()
     self.hotkeyToggle:disable()
   end
 
-  self.startInputWatchers()
-
   return self
 end
 function obj.startInputWatchers()
-  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
-    if not dev:watcherIsRunning() then
-      print("Setting up watcher for audio device: ", dev:name())
-      dev:watcherCallback(audiodevwatch):watcherStart()
+  for i,input in ipairs(hs.audiodevice.allInputDevices()) do
+    if not input:watcherIsRunning() then
+      print("Setting up watcher for audio device: ", input:name())
+      input:watcherCallback(audiodevwatch):watcherStart()
     end
   end
 end
