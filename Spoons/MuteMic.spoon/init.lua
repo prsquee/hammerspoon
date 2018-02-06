@@ -1,22 +1,15 @@
 -- Mute Current Audio Input
 
--- Download:
-
 local obj = {}
 obj.__index = obj
 
 -- {{{ metadata
 obj.name = "MuteMic"
-obj.version = "0.1"
+obj.version = "0.0.1"
 obj.author = "sQuEE"
-obj.homepage = "https://github.com/prsquee"
+obj.homepage = "https://github.com/prsquee/hammerspoon/tree/master/Spoons"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 -- }}}
-
-obj.menuBarItem  = nil
-obj.hotkeyToggle = nil
-obj.headphones_icon = hs.menubar.new()
-
 
 local function script_path()
     local str = debug.getinfo(2, "S").source:sub(2)
@@ -25,6 +18,12 @@ end
 obj.spoonPath = script_path()
 
 function obj:init()
+  self.menuBarItem  = nil
+  self.hotkeyToggle = nil
+  self.activeMiteIcon = hs.image.imageFromPath(self.spoonPath.."activeMic.png")
+  self.inactiveMiteIcon = hs.image.imageFromPath(self.spoonPath.."inactiveMic.png")
+
+  self.headphones_icon = hs.menubar.new()
 end
 
 function obj:bindHotkeys(mapping)
@@ -34,7 +33,6 @@ function obj:bindHotkeys(mapping)
   local toggleMods = mapping["toggle"][1]
   local toggleKey  = mapping["toggle"][2]
   self.hotkeyToggle = hs.hotkey.new(toggleMods, toggleKey, function() self.clicked() end)
-
   return self
 end
 
@@ -42,44 +40,19 @@ function audiodevwatch(dev_uid, event_name, event_scope, event_element)
   print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
   inputDev = hs.audiodevice.findDeviceByUID(dev_uid)
   if inputDev:inputMuted() then
-    obj.menuBarItem:setTitle('🙊')
+    obj.menuBarItem:setIcon(obj.inactiveMiteIcon:setSize({w=16,h=16}))
   else
-    obj.menuBarItem:setTitle('🎙')
+    obj.menuBarItem:setIcon(obj.activeMiteIcon:setSize({w=16,h=16}))
   end
-
--- FIXME: this works, but it's a horrible place to put this.
---   if (hostname == 'multivac' and event_name == 'diff') then
---     if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
---       obj.headphones_icon:setTitle('🎧')
---       obj.headphones_icon:returnToMenuBar()
---     else
---       obj.headphones_icon:removeFromMenuBar()
---     end
---   end
 end
-
--- function obj:mbpHeadphonesWatcher()
---   if pcall("hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name") then
---     if hs.audiodevice.defaultOutputDevice():currentOutputDataSource():name() == 'Headphones' then
---       obj.headphones_icon:setTitle('🎧')
---       obj.headphones_icon:returnToMenuBar()
---     end
---   else
---     print('current output device does not have multiple datasource. Prolly Airpods or Digital')
---   end
--- end
 
 function obj:start()
   -- print('this is start')
   hs.audiodevice.defaultInputDevice():setInputMuted(true)
   self.menuBarItem = hs.menubar.new()
-  self.menuBarItem:setTitle('🙊')
+  self.menuBarItem:setIcon(self.inactiveMiteIcon:setSize({w=16,h=16}))
   self.menuBarItem:setClickCallback(self.clicked)
 
-  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
-    print("Setting up watcher for audio device: ", dev:name())
-    dev:watcherCallback(audiodevwatch):watcherStart()
-  end
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -94,12 +67,17 @@ function obj:stop()
     self.hotkeyToggle:disable()
   end
 
-  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
-    dev:watcherStop()
-    print("stopping watcher for audio device: ", dev:name())
-  end
+  self.startInputWatchers()
 
   return self
+end
+function obj.startInputWatchers()
+  for i,dev in ipairs(hs.audiodevice.allInputDevices()) do
+    if not dev:watcherIsRunning() then
+      print("Setting up watcher for audio device: ", dev:name())
+      dev:watcherCallback(audiodevwatch):watcherStart()
+    end
+  end
 end
 
 function obj.clicked()
@@ -112,7 +90,11 @@ function obj.clicked()
 end
 
 function obj:setMenuBarIcon(arg)
-  obj.menuBarItem:setTitle(arg)
+  if arg == "mute" then
+    self.menuBarItem:setIcon(self.inactiveMiteIcon:setSize({w=16,h=16}))
+  else
+    self.menuBarItem:setIcon(self.activeMiteIcon:setSize({w=16,h=16}))
+  end
 end
 
 return obj
