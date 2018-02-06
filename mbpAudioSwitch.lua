@@ -30,9 +30,6 @@ function audiowatch(arg)
 
   elseif arg == "dOut" then
     setOutputIcon()
-    if not hotkeyToggle then
-      setupAudioOutputToggle()
-    end
   end
 end
 -- }}}
@@ -67,7 +64,7 @@ end
 -- }}}
 -- {{{ audio device toggle
 function setupAudioOutputToggle()
-  -- we do have a DP or HDMI audio out connected?
+  -- we do have more than one device to toggle?
   if #hs.audiodevice.allOutputDevices() >= 2 then
     for i,dev in ipairs(hs.audiodevice.allOutputDevices()) do
       if (dev:name() == "DisplayPort" or dev:name() == "HDMI") then
@@ -75,13 +72,11 @@ function setupAudioOutputToggle()
       end
     end
     -- start:
-    hotkeyToggle:enable()
-    setOutputIcon()
+    if digitalOutput then hotkeyToggle:enable() end
   else
     -- stop:
-    hotkeyToggle:disable()
     digitalOutput = nil
-    setOutputIcon()
+    hotkeyToggle:disable()
   end
 end
 function toggleOutput()
@@ -92,8 +87,6 @@ function toggleOutput()
     else
       builtinOutput:setDefaultOutputDevice()
     end
-  else
-    print("no digital or builtin devices are detected. This should never happened")
   end
 end
 -- }}}
