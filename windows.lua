@@ -109,6 +109,20 @@ function fullDimension(dim)
   end
 end
 
+hs.hotkey.bind(hyper, "o", function ()
+  pressed.left = true
+  if pressed.right then
+    fullDimension('w')
+  else
+    nextStep('w', false, function (cell, nextSize)
+      cell.x = 0
+      cell.w = GRID.w / nextSize
+    end)
+  end
+end, function ()
+  pressed.left = false
+end)
+
 hs.hotkey.bind(hyper, "p", function ()
   pressed.down = true
   if pressed.up then
@@ -121,6 +135,20 @@ hs.hotkey.bind(hyper, "p", function ()
   end
 end, function ()
   pressed.down = false
+end)
+
+hs.hotkey.bind(hyper, "[", function ()
+  pressed.up = true
+  if pressed.down then
+      fullDimension('h')
+  else
+    nextStep('h', false, function (cell, nextSize)
+      cell.y = 0
+      cell.h = GRID.h / nextSize
+    end)
+  end
+end, function ()
+  pressed.up = false
 end)
 
 hs.hotkey.bind(hyper, "]", function ()
@@ -137,33 +165,7 @@ end, function ()
   pressed.right = false
 end)
 
-hs.hotkey.bind(hyper, "o", function ()
-  pressed.left = true
-  if pressed.right then
-    fullDimension('w')
-  else
-    nextStep('w', false, function (cell, nextSize)
-      cell.x = 0
-      cell.w = GRID.w / nextSize
-    end)
-  end
-end, function ()
-  pressed.left = false
-end)
 
-hs.hotkey.bind(hyper, "[", function ()
-  pressed.up = true
-  if pressed.down then
-      fullDimension('h')
-  else
-    nextStep('h', false, function (cell, nextSize)
-      cell.y = 0
-      cell.h = GRID.h / nextSize
-    end)
-  end
-end, function ()
-  pressed.up = false
-end)
 
 hs.hotkey.bind(hyper, "space", function ()
   nextFullScreenStep()
