@@ -27,7 +27,9 @@ local function script_path()
 end
 obj.spoonPath = script_path()
 
-obj.airpodsIcon = hs.image.imageFromPath(script_path() .. "airpods.png")
+obj.airpodsIcon = hs.image.imageFromPath(script_path() .. "airpods.png"):setSize({w=16,h=16})
+obj.speakersIcon = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=16,h=16})
+obj.headphonesIcon = hs.image.imageFromPath(script_path() .. "headphones.png"):setSize({w=16,h=16})
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -84,9 +86,9 @@ function audiowatch(arg)
   print("Audiowatch arg: ", arg)
   if arg == "dIn " then
     if hs.audiodevice.defaultInputDevice():inputMuted() then
-      spoon.MuteMic:setMenuBarIcon('🙊')
+      spoon.MuteMic:setMenuBarIcon('mute')
     else
-      spoon.MuteMic:setMenuBarIcon('🎙')
+      spoon.MuteMic:setMenuBarIcon('unmute')
     end
   end
   if (arg == "dOut") then
@@ -100,14 +102,11 @@ end
 
 function setOutputIcon()
   if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
-    obj.outputIcon:setIcon(nil)
-    obj.outputIcon:setTitle('🔊')
-  elseif string.match(hs.audiodevice.defaultOutputDevice():name(), 'AirPods') then
-    obj.outputIcon:setTitle(nil)
-    obj.outputIcon:setIcon(obj.airpodsIcon:setSize({w=16,h=16}))
+    obj.outputIcon:setIcon(obj.speakersIcon)
+  elseif hs.audiodevice.defaultOutputDevice():name():match('AirPods') then
+    obj.outputIcon:setIcon(obj.airpodsIcon)
   else
-    obj.outputIcon:setIcon(nil)
-    obj.outputIcon:setTitle('🎧')
+    obj.outputIcon:setIcon(obj.headphonesIcon)
   end
 end
 
