@@ -90,9 +90,10 @@ function audiowatch(arg)
     else
       spoon.MuteMic:setMenuBarIcon('unmute')
     end
-  end
-  if (arg == "dOut") then
+  elseif (arg == "dOut") then
     setOutputIcon()
+  elseif (arg == "dev#") then
+    spoon.MuteMic:startInputWatchers()
   end
 end
 
