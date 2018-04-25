@@ -55,3 +55,8 @@ hs.hotkey.bind(hyper, 'return', function()
     print("not a phone call window.")
   end
 end)
+
+-- use hyper -/= to move between spaces
+-- cant change ctrl left/right because of logitech options
+hs.hotkey.bind(hyper, '-', function() hs.eventtap.keyStroke({'ctrl'}, 'left') end)
+hs.hotkey.bind(hyper, '=', function() hs.eventtap.keyStroke({'ctrl'}, 'right') end)
