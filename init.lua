@@ -19,4 +19,14 @@ if hostname == "multivac" then
   require("mbpAudioSwitch")
 end
 
-require('windows')
+hs.loadSpoon('MiroWindowsManager')
+hs.window.animationDuration = 0
+spoon.MiroWindowsManager:bindHotkeys({
+  up = {hyper, "["},
+  right = {hyper, "]"},
+  down = {hyper, "p"},
+  left = {hyper, "o"},
+  fullscreen = {hyper, "space"},
+  vertical = {hyper, "\\"}
+
+})
