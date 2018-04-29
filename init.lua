@@ -1,4 +1,5 @@
 hyper = {"ctrl", "alt", "shift"}
+hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
 
@@ -20,13 +21,16 @@ if hostname == "multivac" then
 end
 
 hs.loadSpoon('MiroWindowsManager')
-hs.window.animationDuration = 0
+hs.window.animationDuration = 0.1
 spoon.MiroWindowsManager:bindHotkeys({
   up = {hyper, "["},
   right = {hyper, "]"},
   down = {hyper, "p"},
   left = {hyper, "o"},
   fullscreen = {hyper, "space"},
-  vertical = {hyper, "\\"}
-
+  vertical = {hyper, "\\"},
+  resizeLeft = {hypercmd, "o"},
+  resizeRight = {hypercmd, "]"},
+  resizeUp = {hypercmd, "["},
+  resizeDown = {hypercmd, "p"}
 })
