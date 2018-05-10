@@ -274,18 +274,26 @@ function obj:bindHotkeys(mapping)
     self:_fullVertical()
   end)
 
-  hs.hotkey.bind(mapping.resizeLeft[1], mapping.resizeLeft[2], function ()
-    self:_resizeLeft()
+  hs.hotkey.bind(mapping.resizeLeft[1], mapping.resizeLeft[2],
+    function () self:_resizeLeft() end, nil,
+    function () self:_resizeLeft()
   end)
-  hs.hotkey.bind(mapping.resizeRight[1], mapping.resizeRight[2], function ()
-    self:_resizeRight()
+
+  hs.hotkey.bind(mapping.resizeRight[1], mapping.resizeRight[2],
+    function () self:_resizeRight() end, nil,
+    function () self:_resizeRight()
   end)
-  hs.hotkey.bind(mapping.resizeUp[1], mapping.resizeUp[2], function ()
-    self:_resizeUp()
+
+  hs.hotkey.bind(mapping.resizeUp[1], mapping.resizeUp[2],
+    function () self:_resizeUp() end, nil,
+    function () self:_resizeUp()
   end)
-  hs.hotkey.bind(mapping.resizeDown[1], mapping.resizeDown[2], function ()
-    self:_resizeDown()
+
+  hs.hotkey.bind(mapping.resizeDown[1], mapping.resizeDown[2],
+    function () self:_resizeDown() end, nil,
+    function () self:_resizeDown()
   end)
+
 end
 
 function obj:init()
