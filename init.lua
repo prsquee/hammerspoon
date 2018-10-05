@@ -14,8 +14,7 @@ if hostname == "Magic Hi Sierra" then
   hs.loadSpoon("AudioSwitch")
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
-end
-if hostname == "multivac" then
+else
   -- spoon.MuteMic:mbpHeadphonesWatcher()
   require("mbpAudioSwitch")
 end
