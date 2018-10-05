@@ -21,7 +21,7 @@ if hostname == "multivac" then
 end
 
 hs.loadSpoon('MiroWindowsManager')
-hs.window.animationDuration = 0.1
+hs.window.animationDuration = 0
 spoon.MiroWindowsManager:bindHotkeys({
   up = {hyper, "["},
   right = {hyper, "]"},
