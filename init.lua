@@ -8,7 +8,7 @@ spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 spoon.MuteMic:start()
 
 hostname = hs.host.localizedName()
-if hostname == "Magic Hi Sierra" then
+if hostname == "Magic Mojave" then
   -- require('audio_switch_hackintosh')
   -- print('hackintosh')
   hs.loadSpoon("AudioSwitch")
@@ -22,14 +22,14 @@ end
 hs.loadSpoon('MiroWindowsManager')
 hs.window.animationDuration = 0
 spoon.MiroWindowsManager:bindHotkeys({
-  up = {hyper, "["},
-  right = {hyper, "]"},
-  down = {hyper, "p"},
-  left = {hyper, "o"},
+  up = {hyper, "up"},
+  right = {hyper, "right"},
+  down = {hyper, "down"},
+  left = {hyper, "left"},
   fullscreen = {hyper, "space"},
   vertical = {hyper, "\\"},
-  resizeLeft = {hypercmd, "o"},
-  resizeRight = {hypercmd, "]"},
-  resizeUp = {hypercmd, "["},
-  resizeDown = {hypercmd, "p"}
+  resizeLeft = {hypercmd, "left"},
+  resizeRight = {hypercmd, "right"},
+  resizeUp = {hypercmd, "up"},
+  resizeDown = {hypercmd, "down"}
 })
