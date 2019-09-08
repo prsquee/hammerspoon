@@ -1,13 +1,13 @@
 hs.hotkey.bind(hyper, 'b', function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
-hs.hotkey.bind(hyper, 's', function()
-  ActivateScreenSaverScript = [[
-    tell application "System Events"
-      start current screen saver
-    end tell
-  ]]
-  hs.osascript.applescript(ActivateScreenSaverScript)
-end)
+-- hs.hotkey.bind(hyper, 's', function()
+--   ActivateScreenSaverScript = [[
+--     tell application "System Events"
+--       start current screen saver
+--     end tell
+--   ]]
+--   hs.osascript.applescript(ActivateScreenSaverScript)
+-- end)
 
 -- hyper + c to copy solution:
 

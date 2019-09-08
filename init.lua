@@ -15,8 +15,11 @@ if hostname == "Magic Mojave" then
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
 else
-  -- spoon.MuteMic:mbpHeadphonesWatcher()
   require("mbpAudioSwitch")
+  hs.loadSpoon("Coffee")
+  spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
+  spoon.Coffee:start()
+
 end
 
 hs.loadSpoon('MiroWindowsManager')
