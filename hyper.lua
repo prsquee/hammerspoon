@@ -11,7 +11,7 @@ hs.hotkey.bind(hyper, 'b', function() hs.eventtap.keyStrokes(hs.pasteboard.getCo
 
 -- hyper + c to copy solution:
 
-hs.hotkey.bind(hyper, 'c', function()
+hs.hotkey.bind(hypercmd, 'c', function()
   if hs.application.frontmostApplication():name() == 'Safari' then
   CopySolution = [[
     tell application "Safari"
@@ -31,6 +31,28 @@ hs.hotkey.bind(hyper, 'c', function()
   end
 end)
 
+hs.hotkey.bind(hyper, 'c', function()
+  if hs.application.frontmostApplication():name() == 'Safari' then
+  CopyCase = [[
+    on doSplit(myString,myDelimiter)
+      set oldDelimiters to AppleScript's text item delimiters
+      set AppleScript's text item delimiters to myDelimiter
+      set array to every text item of myString
+      set AppleScript's text item delimiters to oldDelimiters
+      return array
+    end doSplit
+    tell application "Safari"
+      set TITLE to the name of front document as string
+      set split to my doSplit(TITLE, " | ")
+      set casenumber to item 1 of split
+      set the clipboard to casenumber
+    end tell
+  ]]
+    if hs.osascript.applescript(CopyCase) then
+      hs.notify.new({title="Copy Case", informativeText="copied to clipboard"}):send()
+    end
+  end
+end)
 -- answer phone
 --
 hs.hotkey.bind(hyper, 'return', function()
