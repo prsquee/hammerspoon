@@ -62,7 +62,7 @@ hs.hotkey.bind(hyper, 'return', function()
   if (telephoneApp:focusedWindow():title() ~= "Red Hat") then
     telephoneApp:selectMenuItem({"Call", "Answer"})
 
-    if hostname == "Magic Hi Sierra" then
+    if hostname == "Magic Mojave" then
       spoon.AudioSwitch.headphonesMic:setDefaultInputDevice()
       if spoon.AudioSwitch.headphonesMic:inputMuted() then
         spoon.AudioSwitch.headphonesMic:setInputMuted(false)

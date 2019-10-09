@@ -7,6 +7,9 @@ hs.loadSpoon("MuteMic")
 spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 spoon.MuteMic:start()
 
+hs.loadSpoon("Coffee")
+spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
+spoon.Coffee:start()
 hostname = hs.host.localizedName()
 if hostname == "Magic Mojave" then
   -- require('audio_switch_hackintosh')
@@ -16,10 +19,6 @@ if hostname == "Magic Mojave" then
   spoon.AudioSwitch:start()
 else
   require("mbpAudioSwitch")
-  hs.loadSpoon("Coffee")
-  spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
-  spoon.Coffee:start()
-
 end
 
 hs.loadSpoon('MiroWindowsManager')
