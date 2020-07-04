@@ -21,9 +21,11 @@ if hostname == "Magic Mojave" then
   hs.loadSpoon("RotateScreen")
   spoon.RotateScreen:bindHotkeys({toggle={hyper, "`"}})
   spoon.RotateScreen:start(hs.screen'BenQ')
+  require("backled")
 else
   require("mbpAudioSwitch")
 end
+
 
 
 
