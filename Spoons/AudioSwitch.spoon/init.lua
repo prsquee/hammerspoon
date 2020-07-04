@@ -81,10 +81,11 @@ function obj.clicked()
   end
 end
 
-
+-- this is run when input has changed.
 function audiowatch(arg)
-  print("Audiowatch arg: ", arg)
+  -- print("Audiowatch arg: ", arg)
   if arg == "dIn " then
+    print("input changed to " .. hs.audiodevice.defaultInputDevice():name())
     if hs.audiodevice.defaultInputDevice():inputMuted() then
       spoon.MuteMic:setMenuBarIcon('mute')
     else
@@ -97,9 +98,6 @@ function audiowatch(arg)
   end
 end
 
-function obj:setMenuBarIcon(arg)
-  obj.outputIcon:setTitle(arg)
-end
 
 function setOutputIcon()
   if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then

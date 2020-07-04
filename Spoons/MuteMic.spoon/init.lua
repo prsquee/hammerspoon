@@ -35,11 +35,14 @@ function obj:bindHotkeys(mapping)
   return self
 end
 
+-- thsi is run when mute event is received by a device.
 function audiodevwatch(dev_uid, event_name, event_scope, event_element)
-  print("dev_uid:", dev_uid, "event_name:", event_name, "event_scope:",event_scope, "event_element:",event_element)
-  if hs.audiodevice.findDeviceByUID(dev_uid):inputMuted() then
+  current_input = hs.audiodevice.current('input')
+  if current_input['uid'] == dev_uid and current_input['muted'] then
+    print(current_input['name'] .. " is muted")
     obj.menuBarItem:setIcon(obj.inactiveMicIcon:setSize({w=16,h=16}))
   else
+    print(hs.audiodevice.findDeviceByUID(dev_uid):name() .. " is not muted")
     obj.menuBarItem:setIcon(obj.activeMicIcon:setSize({w=16,h=16}))
   end
 end
@@ -49,7 +52,7 @@ function obj:start()
   self.menuBarItem = hs.menubar.new()
   self.menuBarItem:setIcon(self.inactiveMicIcon:setSize({w=16,h=16}))
   self.menuBarItem:setClickCallback(self.clicked)
-  self.startInputWatchers()
+  startInputWatchers()
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -58,16 +61,24 @@ function obj:start()
   return self
 end
 
-function obj:stop()
-  self.menuBarItem:removeFromMenuBar()
-  if self.hotkeyToggle then
-    self.hotkeyToggle:disable()
+function obj:setMenuBarIcon(arg)
+  if arg == "mute" then
+    obj.menuBarItem:setIcon(obj.inactiveMicIcon:setSize({w=16,h=16}))
+  elseif arg == "unmute" then
+    obj.menuBarItem:setIcon(obj.activeMicIcon:setSize({w=16,h=16}))
   end
-
-  return self
 end
 
-function obj.startInputWatchers()
+-- function obj:stop()
+--   self.menuBarItem:removeFromMenuBar()
+--   if self.hotkeyToggle then
+--     self.hotkeyToggle:disable()
+--   end
+
+--   return self
+-- end
+
+function startInputWatchers()
   for i,input in ipairs(hs.audiodevice.allInputDevices()) do
     if not input:watcherIsRunning() then
       print("Setting up watcher for audio device: ", input:name())
@@ -79,7 +90,7 @@ end
 function obj.clicked()
   if hs.audiodevice.defaultInputDevice():inputMuted() then
     hs.audiodevice.defaultInputDevice():setInputMuted(false)
-    hs.audiodevice.defaultInputDevice():setInputVolume(100)
+    hs.audiodevice.defaultInputDevice():setInputVolume(99)
   else
     hs.audiodevice.defaultInputDevice():setInputMuted(true)
   end
