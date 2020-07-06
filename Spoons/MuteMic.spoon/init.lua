@@ -11,6 +11,8 @@ obj.homepage = "https://github.com/prsquee/hammerspoon/tree/master/Spoons"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 -- }}}
 
+local watchers = {}
+
 local function script_path()
     local str = debug.getinfo(2, "S").source:sub(2)
     return str:match("(.*/)")
@@ -69,21 +71,15 @@ function obj:setMenuBarIcon(arg)
   end
 end
 
--- function obj:stop()
---   self.menuBarItem:removeFromMenuBar()
---   if self.hotkeyToggle then
---     self.hotkeyToggle:disable()
---   end
-
---   return self
--- end
-
 function startInputWatchers()
   for i,input in ipairs(hs.audiodevice.allInputDevices()) do
     if not input:watcherIsRunning() then
-      print("Setting up watcher for audio device: ", input:name())
-      input:watcherCallback(audiodevwatch):watcherStart()
+      name = input:name():gsub(' ', '')
+      watchers[name] = input:watcherCallback(audiodevwatch):watcherStart()
     end
+  end
+  for i,x in ipairs(watchers) do
+    print("Setting up watcher for audio device: " .. watchers[i])
   end
 end
 
