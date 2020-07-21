@@ -3,15 +3,15 @@ hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
 
-hs.loadSpoon("MuteMic")
-spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
-spoon.MuteMic:start()
+-- hs.loadSpoon("MuteMic")
+-- spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
+-- spoon.MuteMic:start()
 
 hs.loadSpoon("Coffee")
 spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
 spoon.Coffee:start()
 hostname = hs.host.localizedName()
-if hostname == "Magic Mojave" then
+if hostname == "Magic Catalina" then
   -- require('audio_switch_hackintosh')
   -- print('hackintosh')
   hs.loadSpoon("AudioSwitch")
@@ -25,9 +25,6 @@ if hostname == "Magic Mojave" then
 else
   require("mbpAudioSwitch")
 end
-
-
-
 
 hs.loadSpoon('MiroWindowsManager')
 hs.window.animationDuration = 0

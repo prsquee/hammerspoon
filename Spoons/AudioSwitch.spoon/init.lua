@@ -18,8 +18,8 @@ obj.hotkeyToggle = nil
 obj.headphones = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,2:0')
 obj.speakers   = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1')    -- this is the FIRST line out device
 -- whatever = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,4:2')   -- this is the SECOND line out device
-obj.webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
-obj.headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
+-- obj.webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
+-- obj.headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
 
 local function script_path()
     local str = debug.getinfo(2, "S").source:sub(2)
@@ -74,27 +74,20 @@ function obj.clicked()
 
   if currentOutput:name() == obj.speakers:name() then
     obj.headphones:setDefaultOutputDevice()
-    obj.headphonesMic:setDefaultInputDevice()
+    -- obj.headphonesMic:setDefaultInputDevice()
   else
     obj.speakers:setDefaultOutputDevice()
-    obj.webcamMic:setDefaultInputDevice()
+    -- obj.webcamMic:setDefaultInputDevice()
   end
 end
 
 -- this is run when input has changed.
 function audiowatch(arg)
   -- print("Audiowatch arg: ", arg)
-  if arg == "dIn " then
-    print("input changed to " .. hs.audiodevice.defaultInputDevice():name())
-    if hs.audiodevice.defaultInputDevice():inputMuted() then
-      spoon.MuteMic:setMenuBarIcon('mute')
-    else
-      spoon.MuteMic:setMenuBarIcon('unmute')
-    end
-  elseif (arg == "dOut") then
+  if (arg == "dOut") then
     setOutputIcon()
-  elseif (arg == "dev#") then
-    spoon.MuteMic:startInputWatchers()
+  -- elseif (arg == "dev#") then
+  --   spoon.MuteMic:startInputWatchers()
   end
 end
 
