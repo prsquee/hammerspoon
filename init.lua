@@ -26,6 +26,10 @@ else
   require("mbpAudioSwitch")
 end
 
+hs.loadSpoon("RotateScreen")
+spoon.RotateScreen:bindHotkeys({toggle={hyper, "`"}})
+spoon.RotateScreen:start(hs.screen'BenQ')
+
 hs.loadSpoon('MiroWindowsManager')
 hs.window.animationDuration = 0
 spoon.MiroWindowsManager:bindHotkeys({
