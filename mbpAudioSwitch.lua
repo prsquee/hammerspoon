@@ -11,27 +11,27 @@ local digitalOutput = nil
 local hotkeyToggle  = hs.hotkey.new(hyper, "a", function() toggleOutput() end)
 -- }}}
 -- {{{ general watcher for dev# dIn dOut events
-function audiowatch(arg)
-  -- print("Audiowatch arg: ", arg)
-  -- print(hs.audiodevice.defaultOutputDevice():name())
-  if arg == "dev#" then
-    print("Audiowatch arg: ", arg)
-    print(hs.audiodevice.defaultOutputDevice():name(), hs.audiodevice.defaultInputDevice():name())
-    -- if a new input device is added, like the airpods, start a watcher for it
-    spoon.MuteMic:startInputWatchers()
-    setupAudioOutputToggle()
-
-  elseif arg == "dIn " then
-    if hs.audiodevice.defaultInputDevice():inputMuted() then
-      spoon.MuteMic:setMenuBarIcon("mute")
-    else
-      spoon.MuteMic:setMenuBarIcon("unmute")
-    end
-
-  elseif arg == "dOut" then
-    setOutputIcon()
-  end
-end
+-- function audiowatch(arg)
+--   -- print("Audiowatch arg: ", arg)
+--   -- print(hs.audiodevice.defaultOutputDevice():name())
+--   if arg == "dev#" then
+--     print("Audiowatch arg: ", arg)
+--     print(hs.audiodevice.defaultOutputDevice():name(), hs.audiodevice.defaultInputDevice():name())
+--     -- if a new input device is added, like the airpods, start a watcher for it
+--     -- spoon.MuteMic:startInputWatchers()
+--     setupAudioOutputToggle()
+-- 
+--   -- elseif arg == "dIn " then
+--   --   if hs.audiodevice.defaultInputDevice():inputMuted() then
+--   --     spoon.MuteMic:setMenuBarIcon("mute")
+--   --   else
+--   --     spoon.MuteMic:setMenuBarIcon("unmute")
+--   --   end
+-- 
+--   elseif arg == "dOut" then
+--     setOutputIcon()
+--   end
+-- end
 -- }}}
 -- {{{ menubar icon setting
 function setOutputIcon()
@@ -96,7 +96,7 @@ for i,outputDev in ipairs(hs.audiodevice.allOutputDevices()) do
   outputDev:watcherCallback(audioOutWatcher):watcherStart()
 end
 
-hs.audiodevice.watcher.setCallback(audiowatch)
+-- hs.audiodevice.watcher.setCallback(audiowatch)
 hs.audiodevice.watcher.start()
 
 setOutputIcon()
