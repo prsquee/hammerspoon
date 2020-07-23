@@ -2,23 +2,37 @@ hyper = {"ctrl", "alt", "shift"}
 hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
-secondScreen = nil
 
 -- hs.loadSpoon("MuteMic")
 -- spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 -- spoon.MuteMic:start()
 
-hs.loadSpoon("Coffee")
-spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
-spoon.Coffee:start()
-hostname = hs.host.localizedName()
-if hostname == "Magic Catalina" then
-  require("lights")
+--- {{{ audio switch
+function loadAudioSwitch()
+  yeti:setDefaultInputDevice()
+  hs.loadSpoon("AudioSwitch")
+  spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
+  spoon.AudioSwitch:start()
 end
--- hs.loadSpoon("AudioSwitch")
--- spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
--- spoon.AudioSwitch:start()
 
+yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+if yeti then
+  loadAudioSwitch()
+else
+  -- start yeti watcher here
+  hs.audiodevice.watcher.setCallback(function(arg)
+    -- device number changed, check if it's the yeti
+    if arg == 'dev#' then
+      yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+      if yeti then
+        loadAudioSwitch()
+      end
+    end
+  end)
+end
+--}}}
+--{{{ screen rotation
+secondScreen = nil
 screenWatcher = hs.screen.watcher.new(function()
   if hs.screen'BenQ' then
     hasSecondScreen()
@@ -38,7 +52,8 @@ secondScreen = hs.screen'BenQ'
     hasSecondScreen()
   else
 end
-
+-- }}}-
+-- {{{ windows manager
 hs.loadSpoon('MiroWindowsManager')
 hs.window.animationDuration = 0
 spoon.MiroWindowsManager:bindHotkeys({
@@ -53,3 +68,13 @@ spoon.MiroWindowsManager:bindHotkeys({
   resizeUp =    {hypercmd, "up"},
   resizeDown =  {hypercmd, "down"}
 })
+--}}}
+--{{{ coffee
+hs.loadSpoon("Coffee")
+spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
+spoon.Coffee:start()
+--}}}
+hostname = hs.host.localizedName()
+if hostname == "Magic Catalina" then
+  require("lights")
+end

@@ -4,7 +4,6 @@ local obj = {}
 obj.__index = obj
 
 -- metadata
-
 obj.name = "AudioSwitch"
 obj.version = "0.1"
 obj.author = "sQuEE"
@@ -13,13 +12,9 @@ obj.license = "MIT - https://opensource.org/licenses/MIT"
 
 obj.outputIcon  = nil
 obj.hotkeyToggle = nil
-
--- all my devices
-obj.headphones = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,2:0')
-obj.speakers   = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1')    -- this is the FIRST line out device
--- whatever = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,4:2')   -- this is the SECOND line out device
--- obj.webcamMic = hs.audiodevice.findInputByUID('AppleUSBAudioEngine:Unknown Manufacturer:HD Webcam C525:92B1D710:1')
--- obj.headphonesMic = hs.audiodevice.findInputByUID('AppleHDAEngineInput:1F,3,0,1,0:4')
+obj.speakers = nil
+obj.speakersIcon = nil
+obj.headphones = nil
 
 local function script_path()
     local str = debug.getinfo(2, "S").source:sub(2)
@@ -27,9 +22,18 @@ local function script_path()
 end
 obj.spoonPath = script_path()
 
-obj.airpodsIcon = hs.image.imageFromPath(script_path() .. "airpods.png"):setSize({w=16,h=16})
-obj.speakersIcon = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=16,h=16})
-obj.headphonesIcon = hs.image.imageFromPath(script_path() .. "headphones.png"):setSize({w=16,h=16})
+
+if hs.host.localizedName() == "Magic Catalina" then
+  obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
+  obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
+else
+  -- on a laptop
+  obj.speakers = hs.audiodevice.findDeviceByName("Built-in Output")
+  obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "speakers.png"):setSize({w=18,h=18})
+end
+
+obj.airpodsIcon    = hs.image.imageFromPath(script_path() .. "airpods.png"):setSize({w=18,h=18})
+obj.headphonesIcon = hs.image.imageFromPath(script_path() .. "headphones.png"):setSize({w=18,h=18})
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -43,13 +47,9 @@ function obj:bindHotkeys(mapping)
 end
 
 function obj:start()
-  if not self.speakers or not self.headphones then
-    hs.notify.new({title="Hammerspoon", informativeText="ERROR: Some audio devices are missing", ""}):send()
-    return
-  end
-
   self.outputIcon = hs.menubar.new()
   self.outputIcon:setClickCallback(self.clicked)
+  obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
 
   setOutputIcon()
 
@@ -74,20 +74,8 @@ function obj.clicked()
 
   if currentOutput:name() == obj.speakers:name() then
     obj.headphones:setDefaultOutputDevice()
-    -- obj.headphonesMic:setDefaultInputDevice()
   else
     obj.speakers:setDefaultOutputDevice()
-    -- obj.webcamMic:setDefaultInputDevice()
-  end
-end
-
--- this is run when input has changed.
-function audiowatch(arg)
-  -- print("Audiowatch arg: ", arg)
-  if (arg == "dOut") then
-    setOutputIcon()
-  -- elseif (arg == "dev#") then
-  --   spoon.MuteMic:startInputWatchers()
   end
 end
 
@@ -102,7 +90,14 @@ function setOutputIcon()
   end
 end
 
-hs.audiodevice.watcher.setCallback(audiowatch)
-hs.audiodevice.watcher.start()
+if not hs.audiodevice.watcher.isRunning() then
+  -- this is run when output is changed
+  hs.audiodevice.watcher.setCallback(function(arg)
+    if arg == "dOut" then
+      setOutputIcon()
+    end
+  end)
+  hs.audiodevice.watcher.start()
+end
 
 return obj
