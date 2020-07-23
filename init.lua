@@ -3,32 +3,18 @@ hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
 
--- hs.loadSpoon("MuteMic")
--- spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
--- spoon.MuteMic:start()
+hs.loadSpoon("MuteMic")
+spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
+spoon.MuteMic:start()
 
 --- {{{ audio switch
-function loadAudioSwitch()
+
+yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+if yeti then
   yeti:setDefaultInputDevice()
   hs.loadSpoon("AudioSwitch")
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
-end
-
-yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-if yeti then
-  loadAudioSwitch()
-else
-  -- start yeti watcher here
-  hs.audiodevice.watcher.setCallback(function(arg)
-    -- device number changed, check if it's the yeti
-    if arg == 'dev#' then
-      yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-      if yeti then
-        loadAudioSwitch()
-      end
-    end
-  end)
 end
 --}}}
 --{{{ screen rotation
