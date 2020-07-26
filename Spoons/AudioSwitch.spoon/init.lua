@@ -65,7 +65,6 @@ function obj:stop()
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
-
   return self
 end
 
@@ -79,7 +78,16 @@ function obj.clicked()
   end
 end
 
-
+function checkYeti()
+  yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+  if yeti then
+    yeti:setDefaultInputDevice()
+    obj:bindHotkeys({toggle={hyper, "a"}})
+    obj:start()
+  else
+    obj:stop()
+  end
+end
 function setOutputIcon()
   if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
     obj.outputIcon:setIcon(obj.speakersIcon)
@@ -95,6 +103,9 @@ if not hs.audiodevice.watcher.isRunning() then
   hs.audiodevice.watcher.setCallback(function(arg)
     if arg == "dOut" then
       setOutputIcon()
+    elseif arg == "dev#" then
+      print('device number changed. checking for yeti')
+      checkYeti()
     end
   end)
   hs.audiodevice.watcher.start()

@@ -3,21 +3,22 @@ hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
 
-hs.loadSpoon("MuteMic")
-spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
-spoon.MuteMic:start()
+-- hs.loadSpoon("MuteMic")
+-- spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
+-- spoon.MuteMic:start()
 
---- {{{ audio switch
-
+-- {{{ audio switch
+hs.loadSpoon("AudioSwitch")
 yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
 if yeti then
   yeti:setDefaultInputDevice()
-  hs.loadSpoon("AudioSwitch")
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
 end
+
 --}}}
 --{{{ screen rotation
+hs.loadSpoon("RotateScreen")
 secondScreen = nil
 screenWatcher = hs.screen.watcher.new(function()
   if hs.screen'BenQ' then
@@ -28,7 +29,6 @@ screenWatcher = hs.screen.watcher.new(function()
 end)
 
 function hasSecondScreen()
-  hs.loadSpoon("RotateScreen")
   spoon.RotateScreen:bindHotkeys({toggle={hyper, "`"}})
   spoon.RotateScreen:start(hs.screen'BenQ')
 end
