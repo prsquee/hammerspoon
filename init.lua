@@ -2,11 +2,12 @@ hyper = {"ctrl", "alt", "shift"}
 hypercmd = {"ctrl", "alt", "shift", "cmd"}
 require('auto_reloader')
 require('hyper')
-
--- hs.loadSpoon("MuteMic")
--- spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
--- spoon.MuteMic:start()
-
+--{{{ mutemic
+hs.loadSpoon("MuteMic")
+spoon.MuteMic:init()
+spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
+--}}}
+-- hs.timer.usleep(103)
 -- {{{ audio switch
 hs.loadSpoon("AudioSwitch")
 yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
@@ -14,6 +15,21 @@ if yeti then
   yeti:setDefaultInputDevice()
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
   spoon.AudioSwitch:start()
+end
+
+if not hs.audiodevice.watcher.isRunning() then
+  -- this is run when output,input,device number are changed
+  hs.audiodevice.watcher.setCallback(function(arg)
+    if arg == "dOut" then
+      spoon.AudioSwitch:setOutputIcon()
+    elseif arg == "dev#" then
+      print('device number changed. checking for yeti')
+      spoon.AudioSwitch:checkYeti()
+   -- elseif arg == "dIn " then
+   --   spoon.MuteMic:fixIcon()
+    end
+  end)
+  hs.audiodevice.watcher.start()
 end
 
 --}}}

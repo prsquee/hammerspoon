@@ -51,7 +51,7 @@ function obj:start()
   self.outputIcon:setClickCallback(self.clicked)
   obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
 
-  setOutputIcon()
+  self.setOutputIcon()
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -61,10 +61,15 @@ function obj:start()
 end
 
 function obj:stop()
-  self.outputIcon:removeFromMenuBar()
+  if self.outputIcon then
+    self.outputIcon:removeFromMenuBar()
+    self.outputIcon = nil
+  end
+
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
+  hs.audiodevice.defaultInputDevice():setInputMuted(true)
   return self
 end
 
@@ -78,17 +83,19 @@ function obj.clicked()
   end
 end
 
-function checkYeti()
+function obj.checkYeti()
   yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-  if yeti then
+  if (yeti and not obj.outputIcon) then
     yeti:setDefaultInputDevice()
     obj:bindHotkeys({toggle={hyper, "a"}})
     obj:start()
+    -- spoon.MuteMic:startInputWatchers()
   else
     obj:stop()
   end
 end
-function setOutputIcon()
+
+function obj.setOutputIcon()
   if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
     obj.outputIcon:setIcon(obj.speakersIcon)
   elseif hs.audiodevice.defaultOutputDevice():name():match('AirPods') then
@@ -96,19 +103,6 @@ function setOutputIcon()
   else
     obj.outputIcon:setIcon(obj.headphonesIcon)
   end
-end
-
-if not hs.audiodevice.watcher.isRunning() then
-  -- this is run when output is changed
-  hs.audiodevice.watcher.setCallback(function(arg)
-    if arg == "dOut" then
-      setOutputIcon()
-    elseif arg == "dev#" then
-      print('device number changed. checking for yeti')
-      checkYeti()
-    end
-  end)
-  hs.audiodevice.watcher.start()
 end
 
 return obj
