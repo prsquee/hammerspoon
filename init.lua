@@ -37,6 +37,7 @@ end
 hs.loadSpoon("RotateScreen")
 secondScreen = nil
 screenWatcher = hs.screen.watcher.new(function()
+  print('screen changed')
   if hs.screen'BenQ' then
     hasSecondScreen()
   else
@@ -54,6 +55,7 @@ secondScreen = hs.screen'BenQ'
     hasSecondScreen()
   else
 end
+screenWatcher:start()
 -- }}}-
 -- {{{ windows manager
 hs.loadSpoon('MiroWindowsManager')
