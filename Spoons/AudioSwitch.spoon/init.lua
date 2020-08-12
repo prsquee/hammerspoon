@@ -69,7 +69,6 @@ function obj:stop()
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
-  hs.audiodevice.defaultInputDevice():setInputMuted(true)
   return self
 end
 
@@ -89,7 +88,6 @@ function obj.checkYeti()
     yeti:setDefaultInputDevice()
     obj:bindHotkeys({toggle={hyper, "a"}})
     obj:start()
-    -- spoon.MuteMic:startInputWatchers()
   else
     obj:stop()
   end

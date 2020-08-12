@@ -4,10 +4,8 @@ require('auto_reloader')
 require('hyper')
 --{{{ mutemic
 hs.loadSpoon("MuteMic")
-spoon.MuteMic:init()
 spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 --}}}
--- hs.timer.usleep(103)
 -- {{{ audio switch
 hs.loadSpoon("AudioSwitch")
 yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
@@ -17,20 +15,22 @@ if yeti then
   spoon.AudioSwitch:start()
 end
 
-if not hs.audiodevice.watcher.isRunning() then
-  -- this is run when output,input,device number are changed
-  hs.audiodevice.watcher.setCallback(function(arg)
-    if arg == "dOut" then
-      spoon.AudioSwitch:setOutputIcon()
-    elseif arg == "dev#" then
-      print('device number changed. checking for yeti')
-      spoon.AudioSwitch:checkYeti()
-   -- elseif arg == "dIn " then
-   --   spoon.MuteMic:fixIcon()
-    end
-  end)
-  hs.audiodevice.watcher.start()
+if hs.audiodevice.watcher.isRunning() then
+  hs.audiodevice.watcher.stop()
 end
+
+-- this is run when output,input,device number are changed
+hs.audiodevice.watcher.setCallback(function(arg)
+  if string.find(arg, "dOut") then
+    spoon.AudioSwitch:setOutputIcon()
+  elseif string.find(arg, "dev#") then
+    print('device number changed. checking for yeti')
+    spoon.AudioSwitch:checkYeti()
+  elseif string.find(arg, "dIn ") then
+    spoon.MuteMic:updateMuteState(-1)
+  end
+end)
+hs.audiodevice.watcher.start()
 
 --}}}
 --{{{ screen rotation
