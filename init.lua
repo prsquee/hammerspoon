@@ -78,7 +78,25 @@ hs.loadSpoon("Coffee")
 spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
 spoon.Coffee:start()
 --}}}
+--{{{ url dispatcher
+hs.loadSpoon("URLDispatcher")
+Firefox = "org.mozilla.firefox"
+Chrome = "com.google.Chrome"
+
+spoon.URLDispatcher.url_patterns = {
+  {"https://rhvm%-%d+.+%.brq%.redhat%.com", Firefox},
+  {"https://.+%.example%.ovirt",            Firefox},
+  {"https://.+%.example%.vm",               Firefox},
+  {"https://.+%.example%.com",              Firefox},
+  {"https://meet%.google%.com",             Chrome },
+
+  
+}
+spoon.URLDispatcher:start()
+--}}}
+
 hostname = hs.host.localizedName()
 if hostname == "Magic Catalina" then
   require("lights")
 end
+
