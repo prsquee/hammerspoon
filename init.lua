@@ -88,9 +88,7 @@ spoon.URLDispatcher.url_patterns = {
   {"https://.+%.example%.ovirt",            Firefox},
   {"https://.+%.example%.vm",               Firefox},
   {"https://.+%.example%.com",              Firefox},
-  {"https://meet%.google%.com",             Chrome },
-
-  
+  {"https://meet%.google%.com",             Chrome }
 }
 spoon.URLDispatcher:start()
 --}}}
