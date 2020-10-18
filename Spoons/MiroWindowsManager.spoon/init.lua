@@ -182,6 +182,13 @@ function obj:_resizeDown()
     win:setFrame(frame)
   end
 end
+function obj:_nextScreen()
+  if hs.window.focusedWindow() then
+    local win = hs.window.frontmostWindow()
+    local screen = win:screen()
+    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+  end
+end
 
 
 --- MiroWindowsManager:bindHotkeys()
@@ -220,7 +227,7 @@ function obj:bindHotkeys(mapping)
         cell.h = self.GRID.h / nextSize
       end)
     end
-  end, function () 
+  end, function ()
     self._pressed.down = false
   end)
 
@@ -254,7 +261,7 @@ function obj:bindHotkeys(mapping)
 
   hs.hotkey.bind(mapping.up[1], mapping.up[2], function ()
     self._pressed.up = true
-    if self._pressed.down then 
+    if self._pressed.down then
         self:_fullDimension('h')
     else
       self:_nextStep('h', false, function (cell, nextSize)
@@ -292,6 +299,10 @@ function obj:bindHotkeys(mapping)
   hs.hotkey.bind(mapping.resizeDown[1], mapping.resizeDown[2],
     function () self:_resizeDown() end, nil,
     function () self:_resizeDown()
+  end)
+  hs.hotkey.bind(mapping.nextScreen[1], mapping.nextScreen[2],
+    function () self:_nextScreen() end, nil,
+    function () self:_nextScreen()
   end)
 
 end

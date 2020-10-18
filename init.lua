@@ -66,6 +66,7 @@ spoon.MiroWindowsManager:bindHotkeys({
   down =        {hyper, "down"},
   left =        {hyper, "left"},
   fullscreen =  {hyper, "space"},
+  nextScreen =  {hyper, "delete"},
   vertical =    {hyper, "\\"},
   resizeLeft =  {hypercmd, "left"},
   resizeRight = {hypercmd, "right"},
