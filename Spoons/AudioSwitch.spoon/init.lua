@@ -84,10 +84,12 @@ end
 
 function obj.checkYeti()
   yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-  if (yeti and not obj.outputIcon) then
-    yeti:setDefaultInputDevice()
-    obj:bindHotkeys({toggle={hyper, "a"}})
-    obj:start()
+  if yeti then
+    if not obj.outputIcon then
+      yeti:setDefaultInputDevice()
+      obj:bindHotkeys({toggle={hyper, "a"}})
+      obj:start()
+    end
   else
     obj:stop()
   end
