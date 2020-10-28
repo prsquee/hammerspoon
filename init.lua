@@ -32,6 +32,10 @@ hs.audiodevice.watcher.setCallback(function(arg)
 end)
 hs.audiodevice.watcher.start()
 
+hs.urlevent.bind("audiotoggle", function(eventName, params)
+    spoon.AudioSwitch:clicked()
+end)
+
 --}}}
 --{{{ screen rotation
 hs.loadSpoon("RotateScreen")
