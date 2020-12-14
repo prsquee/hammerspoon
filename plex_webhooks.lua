@@ -8,7 +8,7 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
             if json.event == "media.play" or json.event == "media.resume" then
               hs.execute("/Users/squee/bin/wall_lights.py off")
             end
-            if json.event == "media.pause" then
+            if json.event == "media.pause" or json.event == "media.stop" then
               hs.execute("/Users/squee/bin/wall_lights.py on")
             end
           end
@@ -18,4 +18,3 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
   end
   return "", 200, {}
 end):start()
-
