@@ -95,6 +95,9 @@ spoon.URLDispatcher.url_patterns = {
   {"https://.+%.example%.com",              Firefox},
   {"https://meet%.google%.com",             Chrome }
 }
+spoon.URLDispatcher.url_redir_decoders = {
+  {"open twitter links in tweetbot", "(https://twitter%.com/)", "tweetbot://", true}
+}
 spoon.URLDispatcher:start()
 --}}}
 
