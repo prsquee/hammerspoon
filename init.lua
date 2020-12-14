@@ -100,9 +100,9 @@ spoon.URLDispatcher.url_redir_decoders = {
 }
 spoon.URLDispatcher:start()
 --}}}
-
+--
 hostname = hs.host.localizedName()
 if hostname == "Magic Catalina" then
   require("lights")
+  require('plex_webhooks')
 end
-
