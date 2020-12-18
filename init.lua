@@ -32,6 +32,10 @@ hs.audiodevice.watcher.setCallback(function(arg)
 end)
 hs.audiodevice.watcher.start()
 
+hs.urlevent.bind("audiotoggle", function(eventName, params)
+    spoon.AudioSwitch:clicked()
+end)
+
 --}}}
 --{{{ screen rotation
 hs.loadSpoon("RotateScreen")
@@ -89,11 +93,14 @@ spoon.URLDispatcher.url_patterns = {
   {"https://.+%.example%.vm",               Firefox},
   {"https://.+%.example%.com",              Firefox}
 }
+spoon.URLDispatcher.url_redir_decoders = {
+  {"open twitter links in tweetbot", "(https://twitter%.com/)", "tweetbot://", true}
+}
 spoon.URLDispatcher:start()
 --}}}
-
+--
 hostname = hs.host.localizedName()
 if hostname == "Magic Catalina" then
   require("lights")
+  require('plex_webhooks')
 end
-
