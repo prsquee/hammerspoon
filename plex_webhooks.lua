@@ -13,6 +13,7 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
             end
           end
         end
+        return
       end
     end
   end
