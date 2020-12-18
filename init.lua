@@ -41,7 +41,7 @@ end)
 hs.loadSpoon("RotateScreen")
 secondScreen = nil
 screenWatcher = hs.screen.watcher.new(function()
-  print('screen changed')
+  --print('screen changed')
   if hs.screen'BenQ' then
     hasSecondScreen()
   else
@@ -86,14 +86,12 @@ spoon.Coffee:start()
 --{{{ url dispatcher
 hs.loadSpoon("URLDispatcher")
 Firefox = "org.mozilla.firefox"
-Chrome = "com.google.Chrome"
 
 spoon.URLDispatcher.url_patterns = {
   {"https://rhvm%-%d+.+%.brq%.redhat%.com", Firefox},
   {"https://.+%.example%.ovirt",            Firefox},
   {"https://.+%.example%.vm",               Firefox},
-  {"https://.+%.example%.com",              Firefox},
-  {"https://meet%.google%.com",             Chrome }
+  {"https://.+%.example%.com",              Firefox}
 }
 spoon.URLDispatcher.url_redir_decoders = {
   {"open twitter links in tweetbot", "(https://twitter%.com/)", "tweetbot://", true}
