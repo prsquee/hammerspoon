@@ -33,7 +33,7 @@ end
 
 
 function obj:stop()
-  print('second display disconnedted. Removing keyboard shortcut')
+  --print('second display disconnedted. Removing keyboard shortcut')
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
