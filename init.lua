@@ -37,27 +37,7 @@ end)
 --}}}
 --{{{ screen rotation
 hs.loadSpoon("RotateScreen")
-secondScreen = nil
-screenWatcher = hs.screen.watcher.new(function()
-  --print('screen changed')
-  if hs.screen'BenQ' then
-    hasSecondScreen()
-  else
-    spoon.RotateScreen:stop()
-  end
-end)
-
-function hasSecondScreen()
-  spoon.RotateScreen:bindHotkeys({toggle={hyper, "`"}})
-  spoon.RotateScreen:start(hs.screen'BenQ')
-end
-
-secondScreen = hs.screen'BenQ'
-  if secondScreen then
-    hasSecondScreen()
-  else
-end
-screenWatcher:start()
+spoon.RotateScreen:bindHotkeys('F12')
 -- }}}-
 -- {{{ windows manager
 hs.loadSpoon('MiroWindowsManager')

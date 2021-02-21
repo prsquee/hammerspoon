@@ -10,30 +10,22 @@ obj.author = "sQuEE"
 obj.homepage = "https://github.com/prsquee/hammerspoon"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 
-local screen = nil
-local watcher = nil
-function obj:bindHotkeys(mapping)
+local screens = hs.screen.allScreens()
+local watcher = hs.screen.watcher.new(function()
+	screens = hs.screen.allScreens()
+end)
+watcher:start()
+
+function obj:bindHotkeys(key)
   if (self.hotkeyToggle) then
     self.hotkeyToggle:delete()
   end
-  local toggleMods = mapping["toggle"][1]
-  local toggleKey  = mapping["toggle"][2]
-  self.hotkeyToggle = hs.hotkey.new(toggleMods, toggleKey, function() self.rotateScreen() end)
+  self.hotkeyToggle = hs.hotkey.new("", key, function() self.rotateScreen() end)
+  self.hotkeyToggle:enable()
   return self
 end
-
-function obj:start(secondScreen)
-  if secondScreen and self.hotkeyToggle then
-    print('setting up shortcut for rotating second display')
-    self.hotkeyToggle:enable()
-    screen = secondScreen
-  end
-  return self
-end
-
 
 function obj:stop()
-  --print('second display disconnedted. Removing keyboard shortcut')
   if self.hotkeyToggle then
     self.hotkeyToggle:disable()
   end
@@ -41,10 +33,14 @@ function obj:stop()
 end
 
 function obj.rotateScreen()
-  if screen:rotate() == 270 then
-    screen:rotate(0)
-  else
-    screen:rotate(270)
+  for id,screen in pairs(screens) do
+    if (screen:name() == 'BenQ GW2283') then
+      if screen:rotate() == 270 then
+        screen:rotate(0)
+      else
+        screen:rotate(270)
+      end
+    end
   end
 end
 
