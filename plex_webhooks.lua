@@ -7,13 +7,17 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
     for line in body:gmatch("[^\r\n]+") do
       if line:find('event') then
         local json = hs.json.decode(line)
-        if json.Player.title == 'Magic box' then
+        if json.Player.title == 'Magic TV' then
           if json.Metadata.type == 'movie' or json.Metadata.type == 'episode' then
             if json.event == "media.play" or json.event == "media.resume" then
-              hs.execute("/Users/squee/bin/plex_lights.py off")
+              --hs.execute("/Users/squee/bin/plex_lights.py off")
+              hs.task.new("/Users/squee/bin/plex_lights_off.py", nil):start()
+              break
             end
             if json.event == "media.pause" or json.event == "media.stop" then
-              hs.execute("/Users/squee/bin/plex_lights.py on")
+              --hs.execute("/Users/squee/bin/plex_lights.py on")
+              hs.task.new("/Users/squee/bin/plex_lights_on.py", nil):start()
+              break
             end
           end
         end
