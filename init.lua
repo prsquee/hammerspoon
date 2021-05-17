@@ -24,7 +24,7 @@ hs.audiodevice.watcher.setCallback(function(arg)
   if string.find(arg, "dOut") then
     spoon.AudioSwitch:setOutputIcon()
   elseif string.find(arg, "dev#") then
-    print('device number changed. checking for yeti')
+--    print('device number changed. checking for yeti')
     spoon.AudioSwitch:checkYeti()
   end
 end)

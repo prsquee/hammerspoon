@@ -26,7 +26,7 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
           local entry = ''
           local tag = json.Metadata.type
           if tag == 'movie' then
-            local moviedb_id = string.match(json.Metadata.guid, "/%d+.+")
+            local moviedb_id = string.match(json.Metadata.guid, "/%d+")
             local moviedb_url = 'https://www.themoviedb.org/movie' .. moviedb_id
             log.d(moviedb_url)
             entry = string.format("%s - %s\n\n> %s\n\n[TMDB](%s)\n\n", json.Metadata.title, json.Metadata.year, json.Metadata.summary,moviedb_url)
