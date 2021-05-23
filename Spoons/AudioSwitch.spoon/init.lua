@@ -26,6 +26,9 @@ obj.spoonPath = script_path()
 if hs.host.localizedName() == "Magic Catalina" then
   obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
   obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
+  obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
+  obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+ 
 else
   -- on a laptop
   obj.speakers = hs.audiodevice.findDeviceByName("Built-in Output")
@@ -33,6 +36,7 @@ else
 end
 
 obj.airpodsIcon    = hs.image.imageFromPath(script_path() .. "airpods.png"):setSize({w=18,h=18})
+obj.airpodsMaxIcon = hs.image.imageFromPath(script_path() .. "airpods_max.png"):setSize({w=18,h=18})
 obj.headphonesIcon = hs.image.imageFromPath(script_path() .. "headphones.png"):setSize({w=18,h=18})
 
 function obj:bindHotkeys(mapping)
@@ -49,7 +53,6 @@ end
 function obj:start()
   self.outputIcon = hs.menubar.new()
   self.outputIcon:setClickCallback(self.clicked)
-  obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
 
   self.setOutputIcon()
 
@@ -82,26 +85,22 @@ function obj.clicked()
   end
 end
 
-function obj.checkYeti()
-  yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-  if yeti then
-    if not obj.outputIcon then
-      yeti:setDefaultInputDevice()
-      obj:bindHotkeys({toggle={hyper, "a"}})
-      obj:start()
-    end
-  else
-    obj:stop()
-  end
-end
-
 function obj.setOutputIcon()
+  print(hs.audiodevice.defaultOutputDevice():name())
   if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
     obj.outputIcon:setIcon(obj.speakersIcon)
+  elseif hs.audiodevice.defaultOutputDevice():name():match('AirPods Max') then
+    obj.outputIcon:setIcon(obj.airpodsMaxIcon)
   elseif hs.audiodevice.defaultOutputDevice():name():match('AirPods') then
     obj.outputIcon:setIcon(obj.airpodsIcon)
   else
     obj.outputIcon:setIcon(obj.headphonesIcon)
+  end
+end
+
+function obj.changeInputToYeti()
+  if obj.yeti then
+    obj.yeti:setDefaultInputDevice()
   end
 end
 

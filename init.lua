@@ -8,24 +8,16 @@ spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 --}}}
 -- {{{ audio switch
 hs.loadSpoon("AudioSwitch")
-yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
-if yeti then
-  yeti:setDefaultInputDevice()
-  spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
-  spoon.AudioSwitch:start()
-end
-
-if hs.audiodevice.watcher.isRunning() then
-  hs.audiodevice.watcher.stop()
-end
+spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
+spoon.AudioSwitch:start()
 
 -- this is run when output,input,device number are changed
 hs.audiodevice.watcher.setCallback(function(arg)
   if string.find(arg, "dOut") then
     spoon.AudioSwitch:setOutputIcon()
-  elseif string.find(arg, "dev#") then
---    print('device number changed. checking for yeti')
-    spoon.AudioSwitch:checkYeti()
+    hs.timer.doAfter(1, function()
+      spoon.AudioSwitch:changeInputToYeti()
+    end)
   end
 end)
 hs.audiodevice.watcher.start()
