@@ -24,7 +24,8 @@ obj.spoonPath = script_path()
 
 
 if hs.host.localizedName() == "Magic Catalina" then
-  obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
+  obj.speakers = hs.audiodevice.findDeviceByName('Built-in Output') 
+  --obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
   obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
   obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
   obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
@@ -100,7 +101,7 @@ end
 
 function obj.changeInputToYeti()
   if obj.yeti then
-    obj.yeti:setDefaultInputDevice()
+    obj.headphones:setDefaultInputDevice()
   end
 end
 
