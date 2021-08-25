@@ -23,18 +23,18 @@ end
 obj.spoonPath = script_path()
 
 
-if hs.host.localizedName() == "Magic Catalina" then
-  obj.speakers = hs.audiodevice.findDeviceByName('Built-in Output') 
-  --obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
-  obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
-  obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
-  obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+--if hs.host.localizedName() == "Magic Catalina" then
+obj.speakers = hs.audiodevice.findDeviceByName('Built-in Output') 
+--obj.speakers = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the FIRST line out device
+obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
+obj.headphones = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
+obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
  
-else
-  -- on a laptop
-  obj.speakers = hs.audiodevice.findDeviceByName("Built-in Output")
-  obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "speakers.png"):setSize({w=18,h=18})
-end
+-- else
+--   -- on a laptop
+--   obj.speakers = hs.audiodevice.findDeviceByName("Built-in Output")
+--   obj.speakersIcon   = hs.image.imageFromPath(script_path() .. "speakers.png"):setSize({w=18,h=18})
+-- end
 
 obj.airpodsIcon    = hs.image.imageFromPath(script_path() .. "airpods.png"):setSize({w=18,h=18})
 obj.airpodsMaxIcon = hs.image.imageFromPath(script_path() .. "airpods_max.png"):setSize({w=18,h=18})

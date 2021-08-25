@@ -1,31 +1,35 @@
 hyper = {"ctrl", "alt", "shift"}
 hypercmd = {"ctrl", "alt", "shift", "cmd"}
+hostname = hs.host.localizedName()
+if hostname == "Magic Catalina" then
+  require("lights")
+  require('plex_webhooks')
+  -- {{{ audio switch
+  hs.loadSpoon("AudioSwitch")
+  spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
+  spoon.AudioSwitch:start()
+
+  -- this is run when output,input,device number are changed
+  hs.audiodevice.watcher.setCallback(function(arg)
+    if string.find(arg, "dOut") then
+      spoon.AudioSwitch:setOutputIcon()
+      hs.timer.doAfter(1, function()
+        spoon.AudioSwitch:changeInputToYeti()
+      end)
+    end
+  end)
+  hs.audiodevice.watcher.start()
+
+  hs.urlevent.bind("audiotoggle", function(eventName, params)
+      spoon.AudioSwitch:clicked()
+  end)
+  --}}}
+end
 require('auto_reloader')
 require('hyper')
 --{{{ mutemic
 hs.loadSpoon("MuteMic")
 spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
---}}}
--- {{{ audio switch
-hs.loadSpoon("AudioSwitch")
-spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
-spoon.AudioSwitch:start()
-
--- this is run when output,input,device number are changed
-hs.audiodevice.watcher.setCallback(function(arg)
-  if string.find(arg, "dOut") then
-    spoon.AudioSwitch:setOutputIcon()
-    hs.timer.doAfter(1, function()
-      spoon.AudioSwitch:changeInputToYeti()
-    end)
-  end
-end)
-hs.audiodevice.watcher.start()
-
-hs.urlevent.bind("audiotoggle", function(eventName, params)
-    spoon.AudioSwitch:clicked()
-end)
-
 --}}}
 --{{{ screen rotation
 hs.loadSpoon("RotateScreen")
@@ -69,8 +73,3 @@ spoon.URLDispatcher.url_redir_decoders = {
 spoon.URLDispatcher:start()
 --}}}
 --
-hostname = hs.host.localizedName()
-if hostname == "Magic Catalina" then
-  require("lights")
-  require('plex_webhooks')
-end
