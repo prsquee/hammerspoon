@@ -1,13 +1,14 @@
 local dayone_cmd = '/usr/local/bin/dayone2 --journal Entertainment --tags '
 local log = hs.logger.new('plex', 'debug')
 
-log.i('init plex')
+log.i('init plex_hooks')
 plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, headers, body)
   if method == "POST" then
     for line in body:gmatch("[^\r\n]+") do
       if line:find('event') then
         local json = hs.json.decode(line)
-        if json.Player.title == 'Magic TV' then
+        log.i(json.Player.title)
+        if json.Player.title == 'LG OLED55BXPSA' then
           if json.Metadata.type == 'movie' or json.Metadata.type == 'episode' then
             if json.event == "media.play" or json.event == "media.resume" then
               --hs.execute("/Users/squee/bin/plex_lights.py off")
