@@ -57,19 +57,3 @@ hs.loadSpoon("Coffee")
 spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
 spoon.Coffee:start()
 --}}}
---{{{ url dispatcher
-hs.loadSpoon("URLDispatcher")
-Firefox = "org.mozilla.firefox"
-
-spoon.URLDispatcher.url_patterns = {
-  {"https://rhvm%-%d+.+%.brq%.redhat%.com", Firefox},
-  {"https://.+%.example%.ovirt",            Firefox},
-  {"https://.+%.example%.vm",               Firefox},
-  {"https://.+%.example%.com",              Firefox}
-}
-spoon.URLDispatcher.url_redir_decoders = {
-  {"open twitter links in tweetbot", "(https://twitter%.com/)", "tweetbot://", true}
-}
-spoon.URLDispatcher:start()
---}}}
---
