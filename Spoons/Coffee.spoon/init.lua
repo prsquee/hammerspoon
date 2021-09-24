@@ -53,7 +53,7 @@ function obj:enable()
   hs.caffeinate.set("systemIdle", true, true)
   print('systemIdle: ', hs.caffeinate.get("systemIdle"))
   menu:returnToMenuBar()
-  menu:setTitle("☕️")
+  menu:setTitle("🧉")
   menu:setTooltip("Caffeinated!")
   menu:setClickCallback(function() self.disable() end)
   return self
