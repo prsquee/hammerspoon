@@ -1,7 +1,7 @@
 hyper = {"ctrl", "alt", "shift"}
 hypercmd = {"ctrl", "alt", "shift", "cmd"}
 hostname = hs.host.localizedName()
-if hostname == "Magic Catalina" then
+if hostname == "Magic Computer" then
   require("lights")
   require('plex_webhooks')
   -- {{{ audio switch
