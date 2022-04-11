@@ -35,10 +35,10 @@ end
 function obj.rotateScreen()
   for id,screen in pairs(screens) do
     if (screen:name() == 'BenQ GW2283') then
-      if screen:rotate() == 270 then
+      if screen:rotate() == 90 then
         screen:rotate(0)
       else
-        screen:rotate(270)
+        screen:rotate(90)
       end
     end
   end

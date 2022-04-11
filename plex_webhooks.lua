@@ -7,7 +7,7 @@ plex = hs.httpserver.new():setPort(50001):setCallback(function(method, path, hea
     for line in body:gmatch("[^\r\n]+") do
       if line:find('event') then
         local json = hs.json.decode(line)
-        if json.Player.title == 'LG OLED55BXPSA' then
+        if json.Player.title == 'LG OLED55BXPSA' or json.Player.title == 'Magic Box' then
           if json.Metadata.type == 'movie' or json.Metadata.type == 'episode' then
             if json.event == "media.play" or json.event == "media.resume" then
               --hs.execute("/Users/squee/bin/plex_lights.py off")
