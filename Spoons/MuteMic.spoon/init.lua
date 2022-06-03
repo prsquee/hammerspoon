@@ -19,6 +19,7 @@ function obj:bindHotkeys(mapping)
   local toggleMods = mapping["toggle"][1]
   local toggleKey  = mapping["toggle"][2]
   self.hotkeyToggle = hs.hotkey.new(toggleMods, toggleKey, function() self:toggleMute() end)
+  self.defaultKey   = hs.hotkey.bind({}, "f18", function() self:toggleMute() end)
   self.hotkeyToggle:enable()
   return self
 end
