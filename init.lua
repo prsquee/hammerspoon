@@ -57,3 +57,10 @@ hs.loadSpoon("Coffee")
 spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
 spoon.Coffee:start()
 --}}}
+local SkyRocket = hs.loadSpoon("SkyRocket")
+sky = SkyRocket:new({
+	opacity = 0.3,
+	moveModifiers = {'cmd', 'shift'},
+	resizeModifiers = {'alt', 'shift'},
+	enableWithoutClick = true,
+})
