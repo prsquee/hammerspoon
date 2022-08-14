@@ -14,7 +14,7 @@ if hostname == "Magic Computer" then
     if string.find(arg, "dOut") then
       spoon.AudioSwitch:setOutputIcon()
       hs.timer.doAfter(1, function()
-        spoon.AudioSwitch:changeInputToYeti()
+        spoon.AudioSwitch:changeInputToLoopback()
       end)
     end
   end)
