@@ -32,8 +32,8 @@ hs.loadSpoon("MuteMic")
 spoon.MuteMic:bindHotkeys({toggle={hyper, "f"}})
 --}}}
 --{{{ screen rotation
-hs.loadSpoon("RotateScreen")
-spoon.RotateScreen:bindHotkeys('F12')
+-- hs.loadSpoon("RotateScreen")
+-- spoon.RotateScreen:bindHotkeys('F12')
 -- }}}-
 -- {{{ windows manager
 hs.loadSpoon('MiroWindowsManager')
