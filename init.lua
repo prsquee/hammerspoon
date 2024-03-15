@@ -2,8 +2,7 @@ hyper = {"ctrl", "alt", "shift"}
 hypercmd = {"ctrl", "alt", "shift", "cmd"}
 hostname = hs.host.localizedName()
 if hostname == "Magic Computer" then
-  require("lights")
-  require('plex_webhooks')
+  -- require("lights")
   -- {{{ audio switch
   hs.loadSpoon("AudioSwitch")
   spoon.AudioSwitch:bindHotkeys({toggle={hyper, "a"}})
@@ -57,10 +56,10 @@ hs.loadSpoon("Coffee")
 spoon.Coffee:bindHotkeys({toggle={hyper, "m"}, startSaver={hyper, "s"} })
 spoon.Coffee:start()
 --}}}
-local SkyRocket = hs.loadSpoon("SkyRocket")
-sky = SkyRocket:new({
-	opacity = 0.3,
-	moveModifiers = {'cmd', 'shift'},
-	resizeModifiers = {'alt', 'shift'},
-	enableWithoutClick = true,
-})
+-- local SkyRocket = hs.loadSpoon("SkyRocket")
+-- sky = SkyRocket:new({
+-- 	opacity = 0.3,
+-- 	moveModifiers = {'cmd', 'shift'},
+-- 	resizeModifiers = {'alt', 'shift'},
+-- 	enableWithoutClick = true,
+-- })
