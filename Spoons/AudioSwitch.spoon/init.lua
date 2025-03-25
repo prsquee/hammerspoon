@@ -26,7 +26,7 @@ obj.spoonPath = script_path()
 --obj.speakers = hs.audiodevice.findDeviceByName('Built-in Line Output')
 obj.speakers     = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the second line out device
 obj.speakersIcon = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
-obj.headphones   = hs.audiodevice.findDeviceByName("Yeti Stereo Microphone")
+obj.headphones   = hs.audiodevice.findDeviceByName("Built-in Output")
 obj.loopback     = hs.audiodevice.findInputByName("Loopback Audio")
 --obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
 
