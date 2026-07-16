@@ -23,14 +23,16 @@ end
 obj.spoonPath = script_path()
 
 
---obj.speakers = hs.audiodevice.findDeviceByName('Built-in Line Output')
-obj.speakers     = hs.audiodevice.findDeviceByUID('AppleHDAEngineOutput:1F,3,0,1,3:1') -- this is the second line out device
+obj.speakers     = hs.audiodevice.findDeviceByName("Built-in Output")
 obj.speakersIcon = hs.image.imageFromPath(script_path() .. "harman.png"):setSize({w=18,h=18})
-obj.headphones   = hs.audiodevice.findDeviceByName("Built-in Output")
-obj.loopback     = hs.audiodevice.findInputByName("Loopback Audio")
---obj.yeti = hs.audiodevice.findInputByName("Yeti Stereo Microphone")
+obj.headphones   = hs.audiodevice.findDeviceByName('Built-in Line Output')
+obj.headphonesIcon = "􀑈"
+obj.speakersIcon   = "􀝏"
+obj.airpodsProIcon = "􀪷"
+obj.airpodsMaxIcon = "􀺹"
+obj.iconFontSize   = 19
+obj.iconOffset     = -1
 
-obj.headphonesIcon = hs.image.imageFromPath(script_path() .. "headphones.png"):setSize({w=18,h=18})
 
 function obj:bindHotkeys(mapping)
   if (self.hotkeyToggle) then
@@ -48,6 +50,16 @@ function obj:start()
   self.outputIcon:setClickCallback(self.clicked)
 
   self.setOutputIcon()
+
+  hs.audiodevice.watcher.setCallback(function(event)
+    if event == "dOut" then
+      obj.setOutputIcon()
+    elseif event == "dev#" then
+      -- a device (dis)connected; give macOS a moment to settle the default
+      hs.timer.doAfter(1, function() obj.setOutputIcon() end)
+    end
+  end)
+  hs.audiodevice.watcher.start()
 
   if self.hotkeyToggle then
     self.hotkeyToggle:enable()
@@ -78,18 +90,31 @@ function obj.clicked()
   end
 end
 
-function obj.setOutputIcon()
-  print(hs.audiodevice.defaultOutputDevice():name())
-  if hs.audiodevice.defaultOutputDevice():name() == obj.speakers:name() then
-    obj.outputIcon:setIcon(obj.speakersIcon)
+function obj.iconForDevice(dev)
+  local name = (dev and dev:name()) or ""
+
+  if obj.speakers and name == obj.speakers:name() then
+    return obj.speakersIcon
+  elseif name:find("AirPods Max", 1, true) then
+    return obj.airpodsMaxIcon
+  elseif name:find("AirPods Pro", 1, true) then
+    return obj.airpodsProIcon
   else
-    obj.outputIcon:setIcon(obj.headphonesIcon)
+    return obj.headphonesIcon
   end
 end
 
-function obj.changeInputToLoopback()
-  if obj.loopback then
-    obj.headphones:setDefaultInputDevice()
-  end
+function obj.setOutputIcon()
+  local dev = hs.audiodevice.defaultOutputDevice()
+  print(dev and dev:name())
+
+  local glyph = obj.iconForDevice(dev)
+
+  obj.outputIcon:setIcon(nil)
+  obj.outputIcon:setTitle(hs.styledtext.new(glyph, {
+    font = { name = ".AppleSystemUIFont", size = obj.iconFontSize },
+    baselineOffset = obj.iconOffset
+  }))
 end
+
 return obj
