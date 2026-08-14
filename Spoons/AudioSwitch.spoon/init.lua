@@ -33,10 +33,12 @@ obj.spoonPath = script_path()
 obj.speakersName   = "Built-in Output"
 obj.headphonesName = "Built-in Line Output"
 
--- SF Symbols rendered as menubar text (via setTitle). These are the glyphs
--- themselves (Private Use Area chars), not image files. To get one: open
--- SF Symbols.app, pick a symbol, right-click -> Copy Symbol, paste it here.
-obj.speakersIcon   = "􀝏"   -- hifispeaker.fill
+-- SF Symbols rendered in the menubar. To get a glyph: open SF Symbols.app,
+-- pick a symbol, right-click -> Copy Symbol, paste it between the quotes.
+-- An icon can be either:
+--   a plain glyph string            -> drawn as menubar text (fast path), or
+--   { glyph = "X", rotate = 180 }   -> drawn as a rotated template image.
+obj.speakersIcon   = { glyph = "􀝏", rotate = 180 }  -- SoundSticks: testtube.2, flipped -- REPLACE glyph with real testtube.2
 obj.headphonesIcon = "􀑈"   -- headphones
 
 -- Icon selection rules: first substring match (case-sensitive) wins. AirPods
@@ -56,6 +58,31 @@ obj.iconOffset   = -1    -- vertical nudge: negative = lower, positive = raise
 
 local function deviceByName(name)
   return name and hs.audiodevice.findDeviceByName(name) or nil
+end
+
+-- Render a glyph rotated by `angle` degrees into a menubar template image.
+-- (setTitle/styledtext can't rotate text, so rotated icons go through canvas.)
+local function glyphImage(glyph, size, angle)
+  local dim   = math.ceil(size * 1.7)       -- canvas size (glyph scales to the bar)
+  local lineH = math.ceil(size * 1.3)       -- approx glyph line height
+  local raise = 0                           -- fine-tune: + = up, - = down (post-flip)
+  local c = hs.canvas.new({ x = 0, y = 0, w = dim, h = dim })
+  c[1] = {
+    type  = "text",
+    text  = hs.styledtext.new(glyph, {
+      font           = { name = ".AppleSystemUIFont", size = size },
+      color          = { white = 0, alpha = 1 },
+      paragraphStyle = { alignment = "center" },
+    }),
+    -- vertically centered frame so the flip keeps the glyph centered
+    frame = { x = 0, y = math.floor((dim - lineH) / 2) + raise, w = dim, h = lineH },
+    transformation = hs.canvas.matrix.translate(dim / 2, dim / 2)
+                                     :rotate(angle or 180)
+                                     :translate(-dim / 2, -dim / 2),
+  }
+  local img = c:imageFromCanvas()
+  c:delete()
+  return img:template(true)                 -- adapt to light/dark menu bar
 end
 
 -- Pick the glyph for whatever the current default output is.
@@ -81,33 +108,20 @@ function obj.setOutputIcon()
   local name = dev and dev:name() or "No output device"
   obj.log.i("output device -> " .. name)
 
-  obj.outputIcon:setIcon(nil)   -- make sure no image icon lingers
-  obj.outputIcon:setTitle(hs.styledtext.new(obj.iconForDevice(dev), {
-    font = { name = ".AppleSystemUIFont", size = obj.iconFontSize },
-    baselineOffset = obj.iconOffset,
-  }))
-  obj.outputIcon:setTooltip(name)
-end
-
--- Menu shown when the menubar item is clicked: quick toggle + full picker,
--- with a checkmark on the active device.
-function obj.buildMenu()
-  local current     = hs.audiodevice.defaultOutputDevice()
-  local currentName = current and current:name()
-
-  local menu = {
-    { title = "Toggle speakers / headphones", fn = function() obj.clicked() end },
-    { title = "-" },
-  }
-  for _, d in ipairs(hs.audiodevice.allOutputDevices()) do
-    local devName = d:name()
-    table.insert(menu, {
-      title   = devName,
-      checked = (devName == currentName),
-      fn      = function() d:setDefaultOutputDevice() end,
-    })
+  local icon = obj.iconForDevice(dev)
+  if type(icon) == "table" then
+    -- rotated / flipped glyph, drawn as a template image
+    obj.outputIcon:setTitle("")
+    obj.outputIcon:setIcon(glyphImage(icon.glyph, obj.iconFontSize, icon.rotate or 180))
+  else
+    -- plain glyph, drawn as menubar text
+    obj.outputIcon:setIcon(nil)
+    obj.outputIcon:setTitle(hs.styledtext.new(icon, {
+      font = { name = ".AppleSystemUIFont", size = obj.iconFontSize },
+      baselineOffset = obj.iconOffset,
+    }))
   end
-  return menu
+  obj.outputIcon:setTooltip(name)
 end
 
 -- ---------------------------------------------------------------------------
@@ -145,7 +159,7 @@ end
 
 function obj:start()
   self.outputIcon = hs.menubar.new()
-  self.outputIcon:setMenu(obj.buildMenu)   -- click opens the device picker
+  self.outputIcon:setClickCallback(self.clicked)   -- click toggles speaker/headphone
 
   self.setOutputIcon()
 
