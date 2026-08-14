@@ -51,3 +51,4 @@ spoon.MiroWindowsManager:bindHotkeys({
   resizeDown =  {hypercmd, "down"}
 })
 --}}}
+require('mouse')
